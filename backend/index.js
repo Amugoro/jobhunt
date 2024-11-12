@@ -11,6 +11,8 @@ const donateRoute = require('./routes/donate');
 const http = require('http');
 const { Server } = require('socket.io');
 const Notification = require('./models/Notification');
+const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 
 
@@ -20,27 +22,67 @@ const Notification = require('./models/Notification');
 app.use(express.json());
 app.use(cors());
 const server = http.createServer(app);
-const io = new Server(server);
+const io = socketIo(server, {
+  cors: { origin: '*' }
+});
 
 io.on('connection', (socket) => {
   console.log('New client connected');
 
-  // Listen for new job application status updates
-  socket.on('job_application_update', async (data) => {
-    const { userId, message } = data;
-    const newNotification = new Notification({ userId, message, type: 'jobUpdate' });
+  socket.on('send_message', async (data) => {
+    // Save notification to database
+    const newNotification = new Notification({
+      userId: data.receiver,
+      message: `${data.senderName} sent you a message.`,
+      type: 'message'
+    });
     await newNotification.save();
 
-    io.emit('notify', newNotification);
+    // Emit notification to the receiver
+    io.to(data.receiver).emit('new_notification', newNotification);
+  });
+    
+  //contact us
+  app.post('/api/contact', async (req, res) => {
+    const { name, email, subject, message } = req.body;
+  
+    const transporter = nodemailer.createTransport({
+      service: process.env.EMAIL_SERVICE,
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  
+    const mailOptions = {
+      from: email,
+      to: 'support@jwskilledhunt.org',
+      subject: `New Contact Us Message: ${subject}`,
+      text: `
+        Name: ${name}
+        Email: ${email}
+        Subject: ${subject}
+        Message: ${message}
+      `,
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ success: true, message: 'Message sent successfully!' });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      res.status(500).json({ success: false, message: 'Failed to send message' });
+    }
   });
 
-  // Listen for new messages
-  socket.on('new_message', async (data) => {
-    const { receiverId, message } = data;
-    const newNotification = new Notification({ userId: receiverId, message, type: 'message' });
+  socket.on('apply_job', async (data) => {
+    const newNotification = new Notification({
+      userId: data.recruiterId,
+      message: `${data.jobseekerName} applied for ${data.jobTitle}.`,
+      type: 'jobApplication'
+    });
     await newNotification.save();
-
-    io.emit('notify', newNotification);
+    io.to(data.recruiterId).emit('new_notification', newNotification);
   });
 
   socket.on('disconnect', () => {
