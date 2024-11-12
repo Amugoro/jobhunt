@@ -1,10 +1,17 @@
 import React from 'react';
-import WelcomeMessage from '../components/WelcomeMessage';
+import HeroSection from './home/hero';
+import JobCategories from './home/Jobcategory';
+import JobListing from './home/joblisting';
+import ProcessSection from './home/process';
 
 function HomePage() {
   return (
     <div className="homepage">
-      <WelcomeMessage />
+      <HeroSection/>
+      <JobCategories/>
+      <JobListing/>
+      <ProcessSection/>
+
     </div>
   );
 }

@@ -1,4 +1,4 @@
-// src/components/Navbar.jsx
+
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
@@ -33,7 +33,7 @@ function Navbar() {
           </>
         )}
         <li>
-          <Link to="/about">About Us</Link>
+          <Link to="/aboutus">About Us</Link>
         </li>
         <li>
           <Link to="/services">Services</Link>
@@ -42,7 +42,7 @@ function Navbar() {
           <Link to="/hire-skilled">Hire Skilled</Link>
         </li>
         <li>
-          <Link to="/find-jobs">Find Jobs Workers</Link>
+          <Link to="/job-search">Find Jobs</Link>
         </li>
         {user && (
           <>
