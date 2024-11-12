@@ -75,6 +75,44 @@ router.delete('/jobs/:jobId', authMiddleware, async (req, res) => {
   }
 });
 
+// Get applicants for a specific job
+router.get('/jobs/:jobId/applicants', authMiddleware, async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.jobId).populate('applicants');
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+    res.status(200).json(job.applicants);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching applicants' });
+  }
+});
+
+// Shortlist an applicant
+router.post('/jobs/:jobId/shortlist/:userId', authMiddleware, async (req, res) => {
+  try {
+    const job = await Job.findById(req.params.jobId);
+    if (!job) return res.status(404).json({ message: 'Job not found' });
+
+    if (!job.shortlisted.includes(req.params.userId)) {
+      job.shortlisted.push(req.params.userId);
+      await job.save();
+    }
+    res.status(200).json({ message: 'Applicant shortlisted' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error shortlisting applicant' });
+  }
+});
+
+// View a job seeker profile
+router.get('/jobseekers/:userId', authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'Job seeker not found' });
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching job seeker profile' });
+  }
+});
+
 // Send an invitation to a jobseeker
 router.post('/invitations', authMiddleware, async (req, res) => {
   try {

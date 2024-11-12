@@ -8,7 +8,7 @@ const multer = require('multer');
 const path = require('path');
 
 // Multer configuration for file uploads (resume/photo)
-const storage = multer.diskStorage({
+const strage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
   },
@@ -16,7 +16,47 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
-const upload = multer({ storage: storage });
+const pload = multer({ storage: storage });
+
+// Configure Multer for profile photo uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/profile_photos');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png/;
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    const mimetype = fileTypes.test(file.mimetype);
+    if (extname && mimetype) {
+      cb(null, true);
+    } else {
+      cb('Error: Images Only!');
+    }
+  },
+});
+
+// Route for updating profile photo
+router.post('/upload-photo', authMiddleware, upload.single('profilePhoto'), async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    user.profilePhoto = `/uploads/profile_photos/${req.file.filename}`;
+    await user.save();
+    res.json({ message: 'Profile photo uploaded successfully', photoUrl: user.profilePhoto });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
 
 // Get all jobs (Jobseeker can view all available jobs)
 router.get('/jobs', async (req, res) => {

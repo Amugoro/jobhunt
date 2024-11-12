@@ -39,4 +39,24 @@ router.post("/invite/:jobSeekerId", isEmployer, async (req, res) => {
   }
 });
 
+// Get all jobs with search filter for skills
+router.get("/jobs", async (req, res) => {
+  try {
+    const jobs = await Job.find().populate('employerId');
+    const jobseeker = await User.findById(req.user._id);
+    if (!jobseeker) {
+      return res.status(404).json({ message: "Jobseeker not found" });
+    }
+    
+    // Filter jobs by skills matching the jobseeker's skills
+    const filteredJobs = jobs.filter((job) => {
+      return jobseeker.skills.some(skill => job.description.includes(skill));
+    });
+
+    res.json(filteredJobs);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch jobs", error });
+  }
+});
+
 module.exports = router;
