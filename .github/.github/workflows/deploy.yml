@@ -1,0 +1,52 @@
+name: Deploy to cPanel via FTP
+
+on:
+  push:
+    branches:
+      - main  # Deploy when changes are pushed to the 'main' branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '12' # Use the Node.js version you need
+
+      # Step 3: Install dependencies and build the frontend
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the frontend
+        run: npm run build
+
+      # Step 4: Upload the build folder to cPanel (React Frontend)
+      - name: Deploy React frontend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build
+          server-dir: /public_html # Adjust this to match your cPanel directory
+
+      # Step 5: Upload the backend files to cPanel (Node.js Backend)
+      - name: Deploy Node.js backend via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: .
+          server-dir: /public_html/backend # Adjust to your backend directory in cPanel
+          exclude: |
+            **/node_modules/**
+            **/.git/**
+            **/build/** # Exclude frontend build files
