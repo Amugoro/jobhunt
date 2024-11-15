@@ -19,18 +19,16 @@ export default function Footer() {
 							</div>
 						</div>
 						<div className="z-40 col-span-12 lg:col-span-5">
-							<form className="flex" action="#">
-								<input
-									placeholder="Enter your email"
-									className="border-gray-400 text-gray-300 h-10 rounded-r-none min-w-50 "
-								/>
-								<button
-									size="lg"
-									className="text-secondary-100 h-10 rounded-l-none w-fit px-4"
-								>
-									Subscribe
-								</button>
-							</form>
+						<form className="flex flex-col md:flex-row items-center justify-center gap-4">
+						<input
+						  type="email"
+						  placeholder="Your email"
+						  className="p-3 rounded text-black w-80"
+						/>
+						<button className="bg-purple-600 hover:bg-purple-500 py-3 px-6 rounded">
+						  Subscribe
+						</button>
+					  </form>
 						</div>
 					</div>
 				</div>

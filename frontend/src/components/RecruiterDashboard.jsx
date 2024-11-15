@@ -4,7 +4,7 @@ import JobCard from './JobCard';
 import io from 'socket.io-client';
 import NotificationList from './NotificationList';
 
-const socket = io('http://localhost:5000'); // Replace with your server URL
+const socket = io('https://jwskilledhunt.org/backend'); // Replace with your server URL
 
 function RecruiterDashboard() {
   const [jobSeekers, setJobSeekers] = useState([]);

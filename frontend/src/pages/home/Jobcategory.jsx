@@ -8,7 +8,11 @@ const JobCategories = () => {
 
   return (
     <section className="job-categories py-12 bg-gray-50 text-center">
-      <h2 className="text-3xl font-semibold text-indigo-600 mb-8">Browse Job Categories</h2>
+    <div className="bg-green-200 text-purple-700">
+      <h2 className="text-3xl font-semibold text-purple-700 mb-8">Browse Job Categories</h2>
+       <p>Post a job to tell us about your project we'll<br/> quickly match you with the right freelancer 
+       or <br/> Tradeperson</p>
+       </div>
       <div className="category-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
         {categories.map((category, index) => (
           <div key={index} className="category-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 flex items-center justify-center">

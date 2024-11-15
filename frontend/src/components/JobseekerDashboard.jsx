@@ -3,7 +3,7 @@ import axios from 'axios';
 import io from 'socket.io-client';
 import NotificationList from './NotificationList';
 
-const socket = io('http://localhost:5000'); // Replace with your backend URL
+const socket = io('https://jwskilledhunt.org/backend');
 
 const JobseekerDashboard = () => {
   const [userData, setUserData] = useState({});
