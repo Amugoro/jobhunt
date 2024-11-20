@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { signup } from "../utils/api";
+import  { useState } from "react";
+import { signup } from "../utils/api"; 
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -9,20 +9,31 @@ function SignupForm() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "jobseeker",
+    role: "freelancer", // Default role is freelancer
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
+  const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
+  
+    if (!passwordRegex.test(formData.password)) {
+      setErrorMessage(
+        "Password must be at least 6 characters long, contain at least one uppercase letter, and one special character."
+      );
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage("Passwords do not match");
       return;
@@ -31,12 +42,16 @@ function SignupForm() {
     const { success, user, message } = await signup(formData);
     if (success) {
       alert(`Welcome ${user.fullName}`);
-      if (user.role === "jobseeker") {
-        navigate("/jobseeker-dashboard");
-      } else if (user.role === "recruiter") {
-        navigate("/recruiter-dashboard");
-      } else if (user.role === "employer") {
-        navigate("/employer-dashboard");
+
+  
+      // Redirect based on the user's role
+      console.log(`Redirecting to dashboard for role: ${user.role}`);
+      if (user.role === "client") {
+        navigate("/client-dashboard");
+      } else if (user.role === "freelancer") {
+        navigate("/freelancer-dashboard");
+      } else if (user.role === "tradeperson") {
+        navigate("/tradeperson-dashboard");
       }
     } else {
       setErrorMessage(message);
@@ -96,7 +111,16 @@ function SignupForm() {
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
+                                {/* Password Validation Message */}
+          {!passwordRegex.test(formData.password) && formData.password.length > 0 && (
+            <p className="text-sm text-red-600">
+              Password must be at least 6 characters long, contain an uppercase letter, and a special character.
+            </p>
+          )}
           </div>
+
+
+
 
           {/* Confirm Password */}
           <div>
@@ -128,34 +152,34 @@ function SignupForm() {
                 <input
                   type="radio"
                   name="role"
-                  value="jobseeker"
-                  checked={formData.role === "jobseeker"}
+                  value="client"
+                  checked={formData.role === "client"}
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Jobseeker
+                Client
               </label>
               <label className="flex items-center">
                 <input
                   type="radio"
                   name="role"
-                  value="recruiter"
-                  checked={formData.role === "recruiter"}
+                  value="freelancer"
+                  checked={formData.role === "freelancer"}
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Recruiter
+                Freelancer
               </label>
               <label className="flex items-center">
                 <input
                   type="radio"
                   name="role"
-                  value="employer"
-                  checked={formData.role === "employer"}
+                  value="tradeperson"
+                  checked={formData.role === "tradeperson"}
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Employer
+                Trade Person
               </label>
             </div>
           </div>

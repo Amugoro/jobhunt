@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const invitationSchema = new mongoose.Schema({
-  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  recipient: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', required: true },
-  status: { type: String, enum: ['sent', 'accepted', 'rejected'], default: 'sent' },
-  message: { type: String, required: true },
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  freelancerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Freelancer' },
+  message: String,
+  status: { type: String, enum: ['Pending', 'Accepted', 'Declined'], default: 'Pending' },
+  createdAt: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('Invitation', invitationSchema);

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
-const MessageSchema = new mongoose.Schema({
-  sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  receiver: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+const messageSchema = new mongoose.Schema({
+  senderId: { type: String, required: true },
+  receiverId: { type: String, required: true },
   message: { type: String, required: true },
+  fileUrl: { type: String },  // Optional file URL
   timestamp: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Message', MessageSchema);
+// Check if the model already exists, if not, create it
+const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
+
+module.exports = Message;

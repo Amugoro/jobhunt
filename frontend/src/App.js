@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import EmployerDashboard from './components/EmployerDashboard';
-import RecruiterDashboard from './components/RecruiterDashboard';
-import JobseekerDashboard from './components/JobseekerDashboard';
+import TradepersonDashboard from '../src/components/TradepersonDashboard'
 import Navbar from './components/Navbar'; 
 import { AuthContextProvider, AuthContext } from './context/AuthContext';
 import LoginForm from './components/LoginForm';
@@ -16,18 +14,36 @@ import FAQs from './pages/FAQs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContactUs from './pages/ContactUs';
 import JobSearch from './pages/JobSearch';
+import FreelancerDashboard from './pages/FreelancerDashboard';
+import ClientDashboard from './components/ClientDashboard';
 
 // Protected Route component
 function ProtectedRoute({ element: Component, ...rest }) {
   const { user } = useContext(AuthContext);
 
-  // Check if user is logged in; if not, redirect to login
+
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  return <Component {...rest} />;
+
+  const roleDashboardRoutes = {
+    client: '/client-dashboard',
+    freelancer: '/freelancer-dashboard',
+    tradeperson: '/tradeperson-dashboard',
+  };
+
+
+  const currentPath = rest.path;
+
+  if (currentPath === roleDashboardRoutes[user.role]) {
+    return <Component />;
+  }
+
+
+  return <Navigate to={roleDashboardRoutes[user.role]} replace />;
 }
+
 
 function App() {
   return (
@@ -37,6 +53,10 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<HomePage />} />
+           {/* Protected Routes */}
+          <Route path="/client-dashboard"  element={<ClientDashboard />} />
+          <Route path="/freelancer-dashboard" element={<FreelancerDashboard/>}  />
+          <Route path="/tradeperson-dashboard" element={<TradepersonDashboard/>} />
           <Route path="/services" element={<Services/>} />
           <Route path="/aboutus" element={<AboutUs/>} />
           <Route path="/job-search" element={<JobSearch />} />
@@ -44,15 +64,16 @@ function App() {
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contact-us" element={<ContactUs />} />
+
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           
 
 
           {/* Protected Routes */}
-          <Route path="/employer-dashboard" element={<ProtectedRoute element={EmployerDashboard} />} />
-          <Route path="/recruiter-dashboard" element={<ProtectedRoute element={RecruiterDashboard} />} />
-          <Route path="/jobseeker-dashboard" element={<ProtectedRoute element={JobseekerDashboard} />} />
+
+          <Route path="/freelancer-dashboard" element={<ProtectedRoute element={FreelancerDashboard} />} />
+          <Route path="/tradeperson-dashboard" element={<ProtectedRoute element={TradepersonDashboard} />} />
         </Routes>
         <Footer/>
       </Router>

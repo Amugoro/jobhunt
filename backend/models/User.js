@@ -1,20 +1,23 @@
-// models/User.js
+const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ["jobseeker", "recruiter", "employer"], required: true },
-  isVerified: { type: Boolean, default: false },
-  profilePhoto: { type: String }, // URL to profile photo
-  resume: { type: String }, // URL to resume
-  bio: { type: String },
-  skills: [{ type: String }],
-  companyName: { type: String },
-  companySize: { type: String },
-  companySummary: { type: String },
-  // Additional fields can be added as necessary
+  role: { type: String, enum: ['client', 'freelancer', 'tradeperson'], required: true },
 });
 
-module.exports = mongoose.model("User", userSchema);
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  this.password = await bcrypt.hash(this.password, 10); // bcryptjs hashing
+  next();
+});
+
+// Compare password
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password); // bcryptjs comparison
+};
+
+module.exports = mongoose.model('User', userSchema);

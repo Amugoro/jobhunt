@@ -1,6 +1,7 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { FaUser, FaSignOutAlt } from "react-icons/fa"; // Import icons
 
 function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -75,23 +76,23 @@ function Navbar() {
                   {user.role} Dashboard
                 </Link>
               </li>
-              <li>
-                <button
+              <li className="flex items-center space-x-4">
+                <FaUser
+                  title="Profile"
+                  className="text-blue-600 cursor-pointer hover:text-blue-800"
+                />
+                <FaSignOutAlt
+                  title="Logout"
+                  className="text-red-600 cursor-pointer hover:text-red-800"
                   onClick={handleLogout}
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                >
-                  Logout
-                </button>
+                />
               </li>
             </>
           )}
         </ul>
 
         {/* Mobile Menu Button */}
-        <button
-          onClick={toggleMenu}
-          className="md:hidden focus:outline-none"
-        >
+        <button onClick={toggleMenu} className="md:hidden focus:outline-none">
           <svg
             className="w-6 h-6"
             fill="none"
@@ -103,7 +104,11 @@ function Navbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth="2"
-              d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              d={
+                isOpen
+                  ? "M6 18L18 6M6 6l12 12"
+                  : "M4 6h16M4 12h16M4 18h16"
+              }
             />
           </svg>
         </button>
@@ -187,16 +192,19 @@ function Navbar() {
                     {user.role} Dashboard
                   </Link>
                 </li>
-                <li>
-                  <button
+                <li className="flex items-center space-x-4">
+                  <FaUser
+                    title="Profile"
+                    className="text-blue-600 cursor-pointer hover:text-blue-800"
+                  />
+                  <FaSignOutAlt
+                    title="Logout"
+                    className="text-red-600 cursor-pointer hover:text-red-800"
                     onClick={() => {
                       handleLogout();
                       toggleMenu();
                     }}
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                  >
-                    Logout
-                  </button>
+                  />
                 </li>
               </>
             )}
