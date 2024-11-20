@@ -13,7 +13,7 @@ const Message = require('./models/Message');
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
-const tradepersonRoutes = require('./routes/tradepersonRoutes');
+const tradePersonRoutes = require('./routes/tradePersonRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cors = require("cors");
 const multer = require("multer");
@@ -48,7 +48,7 @@ app.use("/api/auth", authRoutes);
 app.use('/api/client', clientRoutes);
 app.use('/api/chat', chat);
 app.use('/api/user', userRoutes);
-app.use('/api/tradepersons', tradepersonRoutes);
+app.use('/api/tradepersons', tradePersonRoutes);
 
 // Serve static files (uploaded files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const User = require('../models/User'); // Assuming you have a User model
+const User = require('../models/User');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
