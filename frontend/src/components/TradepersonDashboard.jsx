@@ -22,7 +22,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
 
   const fetchProfile = async (token) => {
     try {
-      const response = await axios.get("/api/profile/tradeperson", {
+      const response = await axios.get("https://jobhunt-b23g.onrender.com/api/profile/tradeperson", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

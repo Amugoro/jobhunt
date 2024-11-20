@@ -8,7 +8,7 @@ const SendInvitation = ({ recipientId, recipientType }) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        'http://localhost:5000/api/client/send-invitation',
+        'https://jobhunt-b23g.onrender.com/api/client/send-invitation',
         { recipientId, recipientType, message },
         { headers: { Authorization: `Bearer ${token}` } }
       );

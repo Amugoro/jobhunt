@@ -40,7 +40,7 @@ const ContactUs = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/contact', formData);
+      const response = await axios.post('https://jobhunt-b23g.onrender.com/api/contact', formData);
       if (response.data.success) {
         setSuccess('Your message has been sent successfully!');
         setFormData({ name: '', email: '', subject: '', message: '' });

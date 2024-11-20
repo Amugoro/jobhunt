@@ -13,7 +13,7 @@ import OurTeam from './pages/OurTeam';
 import FAQs from './pages/FAQs';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContactUs from './pages/ContactUs';
-import JobSearch from './pages/JobSearch';
+import JobSearch from './components/JobSearch';
 import FreelancerDashboard from './pages/FreelancerDashboard';
 import ClientDashboard from './components/ClientDashboard';
 
@@ -56,7 +56,7 @@ function App() {
            {/* Protected Routes */}
           <Route path="/client-dashboard"  element={<ClientDashboard />} />
           <Route path="/freelancer-dashboard" element={<FreelancerDashboard/>}  />
-          <Route path="/tradeperson-dashboard" element={<TradepersonDashboard/>} />
+           <Route path="/tradeperson-dashboard" element={<TradepersonDashboard/>} />
           <Route path="/services" element={<Services/>} />
           <Route path="/aboutus" element={<AboutUs/>} />
           <Route path="/job-search" element={<JobSearch />} />

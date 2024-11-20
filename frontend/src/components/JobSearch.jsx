@@ -20,7 +20,7 @@ const JobSearch = () => {
     } else {
       // Fetch user skills from the backend
       axios
-        .get('http://localhost:5000/api/user/skills', { headers: { Authorization: `Bearer ${token}` } })
+        .get('https://jobhunt-b23g.onrender.com/api/user/skills', { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           setSkills(response.data.skills);
           fetchJobs();
@@ -36,7 +36,7 @@ const JobSearch = () => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        `http://localhost:5000/api/jobs/apply/${jobId}`,
+        `https://jobhunt-b23g.onrender.com/api/jobs/apply/${jobId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,7 +51,7 @@ const JobSearch = () => {
   const fetchAppliedJobs = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs/applied', {
+      const response = await axios.get('https://jobhunt-b23g.onrender.com/api/jobs/applied', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAppliedJobs(response.data.map((job) => job._id));
@@ -64,7 +64,7 @@ const JobSearch = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:5000/api/jobs', {
+      const response = await axios.get('https://jobhunt-b23g.onrender.com/api/jobs', {
         params: { category, location },
       });
 

@@ -9,7 +9,7 @@ const JobSearch = ({ userSkills }) => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await axios.get('/api/jobs');
+        const res = await axios.get('https://jobhunt-b23g.onrender.com/api/jobs');
         const allJobs = res.data;
 
         // Sort jobs with matching skills at the top

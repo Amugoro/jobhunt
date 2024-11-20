@@ -16,7 +16,7 @@ const ProfileList = () => {
     const fetchProfiles = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/client/profiles', {
+        const response = await axios.get('https://jobhunt-b23g.onrender.com/api/client/profiles', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFreelancers(response.data.freelancers);

@@ -6,7 +6,7 @@ const ProfileCard = ({ profile, userType }) => {
   const handleDownloadResume = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`/api/client/download-resume/${profile._id}`, {
+      const response = await axios.get(`https://jobhunt-b23g.onrender.com/api/client/download-resume/${profile._id}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob',
       });
