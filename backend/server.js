@@ -27,7 +27,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'https://jobhunt-1-cdii.onrender.com',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
@@ -199,7 +199,7 @@ io.on('connection', (socket) => {
     const { senderId, receiverId, message } = messageData;
 
     // Save message to database
-    await axios.post('http://localhost:5000/api/chats', messageData);
+    await axios.post('/api/chats', messageData);
 
     // Emit the message to the specific receiver
     if (users[receiverId]) {
