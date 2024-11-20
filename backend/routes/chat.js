@@ -1,5 +1,5 @@
 const express = require('express'); 
-const Message = require('../models/message');  // Import the message model
+const Message = require('../models/Message');  
 const multer = require('multer');
 const path = require('path');
 const router = express.Router();
