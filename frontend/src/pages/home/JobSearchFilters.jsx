@@ -17,7 +17,7 @@ const JobSearchFilters = ({ onSearchChange }) => {
     <section className="py-10 h-60vh">
       <div className="text-center">
         <h1 className="text-2xl font-bold mb-4">Get Hired in Your Dream Field</h1>
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-wrap justify-center gap-4">
           <div className="relative">
             <input
               type="text"

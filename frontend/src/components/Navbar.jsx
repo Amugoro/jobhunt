@@ -36,7 +36,7 @@ function Navbar() {
           
           <li>
             <Link to="/aboutus" className="hover:text-blue-600">
-              About Us
+              About
             </Link>
           </li>
           <li>
@@ -46,7 +46,7 @@ function Navbar() {
           </li>
           <li>
             <Link to="/hire-skilled" className="hover:text-blue-600">
-              Hire Skilled
+              Hire
             </Link>
           </li>
           <li>
@@ -128,7 +128,7 @@ function Navbar() {
                 onClick={toggleMenu}
                 className="hover:text-blue-600"
               >
-                About Us
+                About
               </Link>
             </li>
             <li>
@@ -146,7 +146,7 @@ function Navbar() {
                 onClick={toggleMenu}
                 className="hover:text-blue-600"
               >
-                Hire Skilled
+                Hire 
               </Link>
             </li>
             <li>
