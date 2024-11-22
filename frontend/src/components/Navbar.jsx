@@ -33,20 +33,7 @@ function Navbar() {
               Home
             </Link>
           </li>
-          {!user && (
-            <>
-              <li>
-                <Link to="/login" className="hover:text-blue-600">
-                  Login
-                </Link>
-              </li>
-              <li>
-                <Link to="/signup" className="hover:text-blue-600">
-                  Signup
-                </Link>
-              </li>
-            </>
-          )}
+          
           <li>
             <Link to="/aboutus" className="hover:text-blue-600">
               About Us
@@ -67,6 +54,16 @@ function Navbar() {
               Find Jobs
             </Link>
           </li>
+          {!user && (
+            <>
+              <li>
+                <Link to="/login" className="hover:text-blue-600">
+                  Login
+                </Link>
+              </li>
+             
+            </>
+          )}
           {user && (
             <>
               <li>
@@ -124,28 +121,7 @@ function Navbar() {
                 Home
               </Link>
             </li>
-            {!user && (
-              <>
-                <li>
-                  <Link
-                    to="/login"
-                    onClick={toggleMenu}
-                    className="hover:text-blue-600"
-                  >
-                    Login
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/signup"
-                    onClick={toggleMenu}
-                    className="hover:text-blue-600"
-                  >
-                    Signup
-                  </Link>
-                </li>
-              </>
-            )}
+           
             <li>
               <Link
                 to="/aboutus"
@@ -182,6 +158,24 @@ function Navbar() {
                 Find Jobs
               </Link>
             </li>
+             <span className="flex items-center ml-20 font-bold"> {!user && (
+              <>
+               <li>
+               
+                  <Link
+                    to="/login"
+                    onClick={toggleMenu}
+                     
+                  >
+                  <button classname="p-4 bg-purple-600">
+                    Login
+                     </button>
+                  </Link>
+                 
+                </li>
+               
+              </>
+            )}</span>
             {user && (
               <>
                 <li>
@@ -210,6 +204,7 @@ function Navbar() {
               </>
             )}
           </ul>
+         
         </div>
       )}
     </nav>
