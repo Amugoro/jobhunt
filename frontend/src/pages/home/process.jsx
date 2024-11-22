@@ -23,14 +23,23 @@ export default function ProcessSection() {
 					  Get hired and work with top global clients.<br />
 					  Receive payments in foreign currency.<br />
 					  Signup now and take your freelancer career global.
+					  <button className="mt-10 bg-white  text-purple-800 px-4 py-2 rounded-lg hover:bg-indigo-700 hover:text-white transition-all duration-700">
+					  <a
+					  href="/signup"
+					  >
+					  
+					  Signup
+					  </a>
+					  </button>
 					</p>
+					     
 				  </div>
 				  
 						<div className="col-span-12 lg:col-span-4">
 							<h3 className="mb-3 text-3xl bg-green-600 text-white font-semibold p-6">
 								Trades-Person
 							</h3>
-							<div className="text-white bg-green-300 h-[65vh] rounded-lg p-8">
+							<div className="text-white bg-green-500 h-[65vh] rounded-lg p-8">
 							<p className="text-white p-2 ">
 								Get instant access to skilled tradepeople for your daily needs such as:<br/>
 								<ul>
@@ -52,6 +61,7 @@ export default function ProcessSection() {
 							</ol>
 							</p>
 							</div>
+							
 
 
 						</div>
