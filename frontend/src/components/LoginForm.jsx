@@ -120,6 +120,13 @@ function LoginForm() {
           Forgot Password?
         </p>
 
+        <p className="mt-6 text-sm text-center text-gray-600">
+        Don't have an account?{" "}
+        <a href="/signup" className="text-blue-600 hover:underline">
+          Signup in here
+        </a>
+      </p>
+
         {/* Forgot Password Modal */}
         {showForgotPassword && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
