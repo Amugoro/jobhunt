@@ -86,7 +86,8 @@ const CareerTips = () => {
 
   return (
     <section className="career-tips">
-    <h2 className="text-center mb-6 text-2xl font-bold">Quick Career Tips</h2>
+    <h1 className="text-center mb-6 text-2xl font-bold bg-purple-600 pt-10 items-center">Get Started</h1>
+    <p className="text-center mb-6 text-2xl font-bold">Connect with Top Employers, Freelancers and Tradesperson</p>
     <div
       className={`slider ${isPaused ? "paused" : ""}`}
       onMouseEnter={() => setIsPaused(true)}
