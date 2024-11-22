@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const FAQs = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
+const FAQS = () => {
+  const [activeQuestion, setActiveQuestion] = useState(null);
 
-  // Toggle the active question
-  const toggleFAQ = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
+  const toggleQuestion = (index) => {
+    setActiveQuestion(activeQuestion === index ? null : index);
   };
 
-  // FAQs data
-  const faqData = [
+  const faqs = [
     {
       category: "Getting Started",
       questions: [
@@ -34,16 +32,15 @@ const FAQs = () => {
       questions: [
         {
           question: "How do I create an account?",
-          answer: 'Click "Sign Up" and fill out the registration form.',
+          answer: "Click 'Sign Up' and fill out the registration form.",
         },
         {
           question: "What if I forgot my password?",
-          answer: 'Click "Forgot Password" and follow the reset instructions.',
+          answer: "Click 'Forgot Password' and follow the reset instructions.",
         },
         {
           question: "How do I contact JW SkilledHunt support?",
-          answer:
-            "Email us at support@jwskilledhunt.org or use our online form.",
+          answer: "Email us at support@jwskilledhunt.org or use our online form.",
         },
       ],
     },
@@ -57,13 +54,11 @@ const FAQs = () => {
         },
         {
           question: "How do I apply for a job?",
-          answer:
-            'Click the "Apply" button on the job posting and follow the application instructions.',
+          answer: "Click the 'Apply' button on the job posting and follow the application instructions.",
         },
         {
           question: "Can I save job postings for later?",
-          answer:
-            "Yes, create an account and save job postings to your dashboard for easy access.",
+          answer: "Yes, create an account and save job postings to your dashboard for easy access.",
         },
         {
           question: "Can I apply for multiple jobs at once?",
@@ -71,8 +66,7 @@ const FAQs = () => {
         },
         {
           question: "How do I know if an employer has viewed my application?",
-          answer:
-            "You'll receive a notification when an employer views your application.",
+          answer: "You'll receive a notification when an employer views your application.",
         },
       ],
     },
@@ -82,17 +76,15 @@ const FAQs = () => {
         {
           question: "How do I post a job opening?",
           answer:
-            'Create an account, click "find me candidates," and fill out the job description form.',
+            "Create an account, click 'Find Me Candidates,' and fill out the job description form.",
         },
         {
           question: "How do I manage job applications?",
-          answer:
-            "Log in to your account to view and manage applications for your job postings.",
+          answer: "Log in to your account to view and manage applications for your job postings.",
         },
         {
           question: "Can I manage multiple job postings at once?",
-          answer:
-            "Yes, use our employer dashboard to manage all your job postings.",
+          answer: "Yes, use our employer dashboard to manage all your job postings.",
         },
         {
           question: "How do I contact job applicants?",
@@ -114,8 +106,7 @@ const FAQs = () => {
             "We accept various payment methods for donations, including credit cards and online payment options.",
         },
         {
-          question:
-            "How do I contact JW SkilledHunt support for donation-related queries?",
+          question: "How do I contact JW SkilledHunt support for donation-related queries?",
           answer:
             "Email us at donate@jwskilledhunt.org, and our team will be happy to assist you.",
         },
@@ -124,54 +115,41 @@ const FAQs = () => {
   ];
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
+    <div className="bg-gray-100 min-h-screen py-10">
       <div className="container mx-auto px-6">
-        <h1 className="text-4xl font-bold text-blue-600 text-center mb-10">
-          Frequently Asked Questions (FAQs)
+        <h1 className="text-4xl font-bold text-center text-purple-700 mb-8">
+          Frequently Asked Questions
         </h1>
-        {faqData.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-700 mb-4">
-              {section.category}
-            </h2>
-            {section.questions.map((faq, index) => (
-              <div
-                key={index}
-                className="border-b border-gray-300 py-4 cursor-pointer"
-              >
-                <div
-                  onClick={() => toggleFAQ(`${sectionIndex}-${index}`)}
-                  className="flex justify-between items-center"
-                >
-                  <h3 className="text-lg font-medium text-gray-800">
-                    {faq.question}
-                  </h3>
-                  <span
-                    className={`transform transition-transform duration-1000 ${
-                      activeIndex === `${sectionIndex}-${index}`
-                        ? "rotate-180"
-                        : "rotate-0"
-                    }`}
-                  >
-                    ▼
-                  </span>
-                </div>
-                <div
-                  className={`overflow-hidden transition-all duration-1000 ${
-                    activeIndex === `${sectionIndex}-${index}`
-                      ? "max-h-screen opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <p className="mt-2 text-gray-600">{faq.answer}</p>
-                </div>
+        <div className="space-y-10">
+          {faqs.map((section, sectionIndex) => (
+            <div key={sectionIndex} className="bg-white shadow-md rounded-lg p-6">
+              <h2 className="text-2xl font-semibold text-purple-600 mb-4">
+                {section.category}
+              </h2>
+              <div>
+                {section.questions.map((item, index) => (
+                  <div key={index} className="mb-4">
+                    <button
+                      className="w-full text-left flex justify-between items-center py-2 text-lg font-medium text-gray-700 focus:outline-none"
+                      onClick={() => toggleQuestion(`${sectionIndex}-${index}`)}
+                    >
+                      {item.question}
+                      <span className="text-purple-600">
+                        {activeQuestion === `${sectionIndex}-${index}` ? "-" : "+"}
+                      </span>
+                    </button>
+                    {activeQuestion === `${sectionIndex}-${index}` && (
+                      <p className="mt-2 text-gray-600">{item.answer}</p>
+                    )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default FAQs;
+export default FAQS;

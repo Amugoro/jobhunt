@@ -1,0 +1,38 @@
+/* Animation for Logo Rotation */
+@keyframes rotateLogo {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .navbar-logo {
+    animation: rotateLogo 1s ease-in-out;
+  }
+
+  .navbar{
+    position: fixed;
+  }
+  
+  .page-content {
+   
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+ 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Optional: Add smooth transition for page content */
+  .page-transition {
+    transition: transform 0.3s ease-in-out;
+  }
+  
