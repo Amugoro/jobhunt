@@ -1,7 +1,8 @@
-import React from "react";
+import {useState} from "react";
 import "./CareerTips.css";
 
 const CareerTips = () => {
+  const [isPaused, setIsPaused] = useState(false);
   const tips = [
     {
       title: "Elevate Your Trade Skills",
@@ -85,20 +86,24 @@ const CareerTips = () => {
 
   return (
     <section className="career-tips">
-      <h2 className="text-center mb-6 text-2xl font-bold">Quick Career Tips</h2>
-      <div className="slider">
-        <div className="slider-track">
-          {tips.concat(tips).map((tip, index) => (
-            <div key={index} className="tip-card">
-              <img src={tip.img} alt={tip.title} className="card-img" />
-              <h3 className="card-title">{tip.title}</h3>
-              <p className="card-description">{tip.description}</p>
-            </div>
-          ))}
-        </div>
+    <h2 className="text-center mb-6 text-2xl font-bold">Quick Career Tips</h2>
+    <div
+      className={`slider ${isPaused ? "paused" : ""}`}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <div className="slider-track">
+        {tips.concat(tips).map((tip, index) => (
+          <div key={index} className="tip-card">
+            <img src={tip.img} alt={tip.title} className="card-img" />
+            <h3 className="card-title">{tip.title}</h3>
+            <p className="card-description">{tip.description}</p>
+          </div>
+        ))}
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 };
 
 export default CareerTips;
