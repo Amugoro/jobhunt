@@ -10,9 +10,10 @@ const JobListing = () => {
 
   return (
     <section className="job-listing py-8 px-6 bg-gray-50 rounded-lg shadow-lg max-w-4xl mx-auto">
+    <h1 className="flex items-center ml-10 mb-6 text-lg font-bold">Recent Jobs</h1>
     <div className="flex justify-between items-center mb-6">
-    <h2 className="text-lg font-bold">Recent Jobs</h2>
-    <div className="space-x-2">
+    
+    <div className="space-x-2 flex flex-wrap gap-2 ">
       {["Freelancer", "Tradesperson", "Part-time", "Full-time", "Onsite", "Hybrid"].map((filter) => (
         <button
           key={filter}
