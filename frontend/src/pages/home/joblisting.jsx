@@ -16,7 +16,7 @@ const JobListing = () => {
       {["Freelancer", "Tradesperson", "Part-time", "Full-time", "Onsite", "Hybrid"].map((filter) => (
         <button
           key={filter}
-          className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+          className="px-3 py-1 bg-purple-400 rounded-lg hover:bg-purple-600 p-12 font-bold"
         >
           {filter}
         </button>

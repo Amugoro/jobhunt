@@ -48,7 +48,7 @@ const FloatingSupport = () => {
         onClick={() => setOpen(!open)}
         className="bg-purple-400 text-white p-6 rounded-lg shadow-lg hover:bg-purple-700 focus:outline-none"
       >
-        {open ? "Close" : "Do you need asistant? clich me"}
+        {open ? "Close" : "Do you need asistant? click me"}
       </button>
 
       {/* Support Box */}

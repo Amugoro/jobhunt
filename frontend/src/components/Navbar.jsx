@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { FaUser, FaSignOutAlt } from "react-icons/fa"; // Import icons
+import { FaUser, FaSignOutAlt } from "react-icons/fa"; 
 
 function Navbar() {
   const { user, logout } = useContext(AuthContext);
@@ -21,8 +21,9 @@ function Navbar() {
     <nav className="bg-white shadow-md fixed w-full z-20">
       <div className="max-w-7xl mx-auto flex justify-between items-center p-2">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="items-center">
           <img src="/assets/logo.jpg" alt="logo" className="h-15 w-12" />
+          <h1 className="font-bold text-purple-700 ">JOBWING-SKILLEDHUNT</h1>
         </Link>
 
         {/* Desktop Menu */}
