@@ -1,5 +1,6 @@
 import React from "react";
 import { FaFacebookF, FaLinkedinIn, FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
 	return (
@@ -42,60 +43,52 @@ export default function Footer() {
 			</section>
 			<footer className="">
 				<section className="bg-secondary-100 py-10 px-4">
+				<div className="md:col-span-3 border-t-4 bg-secondary border-primary h-fit p-6 flex flex-col items-center gap-5">
+				<h1 className="text-white font-semibold text-xl">
+					JOBWING SKILLEDHUNT
+				</h1>
+				
+				<div className="text-gray-300 text-sm">
+					<p className="flex items-center ">
+						JobWing-SKILLEDHUNT is an online Recruitment platform for professinals and <br/> Tradepeople
+					</p>
+					<p className="flex items-center gap-2">
+						<span className="font-medium">Follow Us On</span>
+						
+					</p>
+				</div>
+				<div className="flex items-center gap-3 *:size-12 *:bg-secondary-100 *:rounded-md">
+					<a
+						href="https://www.facebook.com/profile.php?id=61553683591870&mibextid=ZbWKwL"
+						className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
+					>
+						<FaFacebookF className="text-xl" />
+					</a>
+					<a
+						href="https://www.linkedin.com/company/jw-skilledhunt/"
+						className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
+					>
+						<FaLinkedinIn className="text-xl" />
+					</a>
+				</div>
+			</div>
 					<div className="container mx-auto min-h-10 grid md:grid-cols-8 gap-10">
-						<div className="md:col-span-3 border-t-4 bg-secondary border-primary h-fit p-6 flex flex-col items-center gap-5">
-							<h1 className="text-white font-semibold text-xl">
-								JW SKILLEDHUNT
-							</h1>
-							<div className="text-center text-gray-300">
-								<span className="text-sm">
-									Postal Address : A. Dianne Sirmans 724 5th
-									Avenue Bethlehem, PA. 18018
-								</span>
-							</div>
-							<div className="text-gray-300 text-sm">
-								<p className="flex items-center gap-2">
-									<span className="font-medium">Phone:</span>
-									<span>+234 123456789</span>
-								</p>
-								<p className="flex items-center gap-2">
-									<span className="font-medium">Email:</span>
-									<span>info@jwskilledhunt.org</span>
-								</p>
-							</div>
-							<div className="flex items-center gap-3 *:size-12 *:bg-secondary-100 *:rounded-md">
-								<a
-									href="https://www.facebook.com/profile.php?id=61553683591870&mibextid=ZbWKwL"
-									className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
-								>
-									<FaFacebookF className="text-xl" />
-								</a>
-								<a
-									href="https://www.linkedin.com/company/jw-skilledhunt/"
-									className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
-								>
-									<FaLinkedinIn className="text-xl" />
-								</a>
-							</div>
-						</div>
+						
 						<div className="md:col-span-2 text-white">
 							<h1 className="font-medium text-lg">
-								Useful links:
+							Company 
+							
 							</h1>
 							<ul className="mt-3 space-y-4">
 
-							<li>
-							<a href="/donate" className="text-blue-400 hover:underline">
-							Support Us with a Donation
-						  </a>
-						</li>
+							
 								<li>
 									<a
-										href="/about"
+										href="/aboutus"
 										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
 									>
 										<FaChevronRight className="text-xs text-primary" />
-										About Us
+										About
 									</a>
 								</li>
 								<li>
@@ -107,15 +100,7 @@ export default function Footer() {
 										Services
 									</a>
 								</li>
-								<li>
-									<a
-										href="/faqs"
-										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
-									>
-										<FaChevronRight className="text-xs text-primary" />
-										FAQ's
-									</a>
-								</li>
+								
 								<li>
 									<a
 										href="/our-team"
@@ -125,15 +110,7 @@ export default function Footer() {
 										Team
 									</a>
 								</li>
-								<li>
-									<a
-										href="/privacy-policy"
-										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
-									>
-										<FaChevronRight className="text-xs text-primary" />
-										Privacy and Policy
-									</a>
-								</li>
+								
 								<li>
 									<a
 										href="/contact-us"
@@ -147,7 +124,7 @@ export default function Footer() {
 						</div>
 						<div className="text-white md:col-span-2">
 							<h1 className="font-medium text-lg">
-								Our Services:
+								For Jobs
 							</h1>
 							<ul className="mt-3 space-y-4">
 								<li>
@@ -156,7 +133,7 @@ export default function Footer() {
 										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
 									>
 										<FaChevronRight className="text-xs text-primary" />
-										Hire Skilled Worker
+										Browse Categories
 									</a>
 								</li>
 								<li>
@@ -165,9 +142,104 @@ export default function Footer() {
 										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
 									>
 										<FaChevronRight className="text-xs text-primary" />
-										Find Jobs
+										Browse Industries
 									</a>
 								</li>
+								<li>
+								<a
+									href="/job-search"
+									className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+								>
+									<FaChevronRight className="text-xs text-primary" />
+									Browse Location
+								</a>
+							    </li>
+								<li>
+								<a
+									href="/job-search"
+									className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+								>
+									<FaChevronRight className="text-xs text-primary" />
+									Pricing
+								</a>
+							    </li>
+							</ul>
+						</div>
+						<div className="text-white md:col-span-2">
+							<h1 className="font-medium text-lg">
+								For Employers
+							</h1>
+							<ul className="mt-3 space-y-4">
+
+								<li>
+									<a
+										href="/job-search"
+										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+									>
+										<FaChevronRight className="text-xs text-primary" />
+										Post Jobs
+									</a>
+								</li>
+								<li>
+								<a
+									href="/hire"
+									className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+								>
+									<FaChevronRight className="text-xs text-primary" />
+									Hire Tradesperson
+								</a>
+							    </li>
+								<li>
+								<a
+									href="/hire"
+									className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+								>
+									<FaChevronRight className="text-xs text-primary" />
+									Hire Freelancer
+								</a>
+							    </li>
+							</ul>
+						</div>
+						<div className="text-white md:col-span-2">
+							<h1 className="font-medium text-lg">
+								Support
+							</h1>
+							<ul className="mt-3 space-y-4">
+								<li>
+									<a
+										href="/hire"
+										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+									>
+										<FaChevronRight className="text-xs text-primary" />
+										Help Center
+									</a>
+								</li>
+								<li>
+									<a
+										href="/faqs"
+										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+									>
+										<FaChevronRight className="text-xs text-primary" />
+										FAQ's
+									</a>
+								</li>
+								<li>
+									<a
+										href="/privacy-policy"
+										className="flex items-center gap-2 text-sm hover:text-primary transition duration-300"
+									>
+										<FaChevronRight className="text-xs text-primary" />
+										Privacy and Policy
+									</a>
+								</li>
+								<li>
+								<Link to="/donation-page" 
+								className="flex items-center gap-2 text-sm hover:text-primary transition duration-300">
+								<FaChevronRight className="text-xs text-primary" />
+								Donate
+								
+							    </Link>
+						        </li>
 							</ul>
 						</div>
 					</div>

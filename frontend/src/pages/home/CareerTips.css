@@ -1,0 +1,62 @@
+.career-tips {
+    padding: 2rem;
+    background-color: #f9f9f9;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .slider {
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+  
+  .slider-track {
+    display: flex;
+    animation: slide 40s linear infinite; /* Adjust duration as needed */
+    width: calc(200%); /* Double width for duplicate cards */
+  }
+  
+  .tip-card {
+    flex: 0 0 30%; /* Each card takes up 30% of the slider width */
+    margin: 0 1rem;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    overflow: hidden;
+    padding: 1rem;
+  }
+  
+  .card-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+  
+  .card-title {
+    margin: 1rem 0 0.5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .card-description {
+    padding: 0 1rem 1rem;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  
+  /* Animation for sliding */
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%); /* Slide through half of the duplicated track */
+  }
+  }
+  

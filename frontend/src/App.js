@@ -16,6 +16,7 @@ import ContactUs from './pages/ContactUs';
 import JobSearch from './components/JobSearch';
 import FreelancerDashboard from './pages/FreelancerDashboard';
 import ClientDashboard from './components/ClientDashboard';
+import DonationPage from './pages/DonationPage';
 
 // Protected Route component
 function ProtectedRoute({ element: Component, ...rest }) {
@@ -64,6 +65,7 @@ function App() {
           <Route path="/faqs" element={<FAQs />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/donation-page" element={<DonationPage />} />
 
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />

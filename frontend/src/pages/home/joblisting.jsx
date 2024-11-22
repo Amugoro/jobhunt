@@ -10,7 +10,19 @@ const JobListing = () => {
 
   return (
     <section className="job-listing py-8 px-6 bg-gray-50 rounded-lg shadow-lg max-w-4xl mx-auto">
-      <h2 className="text-3xl font-semibold text-center text-indigo-600 mb-6">New & Random Jobs</h2>
+    <div className="flex justify-between items-center mb-6">
+    <h2 className="text-lg font-bold">Recent Jobs</h2>
+    <div className="space-x-2">
+      {["Freelancer", "Tradesperson", "Part-time", "Full-time", "Onsite", "Hybrid"].map((filter) => (
+        <button
+          key={filter}
+          className="px-3 py-1 bg-gray-200 rounded-full hover:bg-gray-300"
+        >
+          {filter}
+        </button>
+      ))}
+    </div>
+  </div>
       <ul className="space-y-6">
         {jobs.map((job, index) => (
           <li key={index} className="job-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300">

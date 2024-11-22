@@ -13,92 +13,49 @@ export default function ProcessSection() {
 			<div className="container mx-auto">
 				<div className="nav-tabs round-pill">
 					<div className="grid items-center grid-cols-12 gap-5">
-						<div className="col-span-12 lg:col-span-6">
-							<h3 className="mb-3 text-3xl text-gray-900 font-semibold">
-								How It Works
+					<div className="col-span-12 lg:col-span-4">
+					<h3 className="mb-3 text-3xl items-center text-white bg-purple-600 font-semibold p-6">
+					  Freelancer
+					</h3>
+					<p className="text-white bg-purple-600 h-[65vh] rounded-lg p-8">
+					  Create a professional profile showcasing your skills. <br />
+					  Browse and apply for international projects.<br />
+					  Get hired and work with top global clients.<br />
+					  Receive payments in foreign currency.<br />
+					  Signup now and take your freelancer career global.
+					</p>
+				  </div>
+				  
+						<div className="col-span-12 lg:col-span-4">
+							<h3 className="mb-3 text-3xl bg-green-600 text-white font-semibold p-6">
+								Trades-Person
 							</h3>
-							<p className="text-gray-500">
-								Post a job to tell us about your project. We&apos;ll quickly match you with the right freelancers.
-							</p>
-
-							<div className="mt-5">
-								<ul className="text-gray-700 nav">
-									<li className="w-full mb-[22px]">
-										<a
-											href="#"
-											onClick={() => handleTabClick("v-pills-home-tab")}
-											className={`relative inline-block w-full p-2 ${
-												activeTab === "v-pills-home-tab" ? "active group/active" : "group"
-											}`}
-											aria-current={activeTab === "v-pills-home-tab" ? "page" : undefined}
-										>
-											<div className="flex gap-4">
-												<div className="shrink-0 h-10 w-10 rounded-full text-center bg-lime-100">
-													<span className="text-gray-900 text-16 leading-[2.5]">1</span>
-												</div>
-												<div className="grow ltr:ml-4 rtl:mr-4">
-													<h5 className="fs-18 text-gray-900 font-medium">
-														Register an account
-													</h5>
-													<p className="mt-1 mb-2 text-gray-500">
-														Due to its widespread use as filler text for layouts, non-readability is of great importance.
-													</p>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li className="w-full mb-[22px]">
-										<a
-											href="#"
-											onClick={() => handleTabClick("v-pills-profile")}
-											className={`relative inline-block w-full p-2 ${
-												activeTab === "v-pills-profile" ? "active group/active" : "group"
-											}`}
-											aria-current={activeTab === "v-pills-profile" ? "page" : undefined}
-										>
-											<div className="flex gap-4">
-												<div className="shrink-0 h-10 w-10 rounded-full text-center bg-lime-100">
-													<span className="text-gray-900 text-16 leading-[2.5]">2</span>
-												</div>
-												<div className="grow ltr:ml-4 rtl:mr-4">
-													<h5 className="fs-18 text-gray-900 font-medium">
-														Find your job
-													</h5>
-													<p className="mt-1 mb-2 text-gray-500">
-														There are many variations of passages of lorem ipsum, but the majority have alteration in some form.
-													</p>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li className="w-full mb-[22px]">
-										<a
-											href="#"
-											onClick={() => handleTabClick("v-pills-messages")}
-											className={`relative inline-block w-full p-2 ${
-												activeTab === "v-pills-messages" ? "active group/active" : "group"
-											}`}
-											aria-current={activeTab === "v-pills-messages" ? "page" : undefined}
-										>
-											<div className="flex gap-4">
-												<div className="shrink-0 h-10 w-10 rounded-full text-center bg-lime-100">
-													<span className="text-gray-900 text-16 leading-[2.5]">3</span>
-												</div>
-												<div className="grow ltr:ml-4 rtl:mr-4">
-													<h5 className="fs-18 text-gray-900 font-medium">
-														Apply for job
-													</h5>
-													<p className="mt-1 mb-2 text-gray-500">
-														It is a long established fact that a reader will be distracted by the readable content of a page.
-													</p>
-												</div>
-											</div>
-										</a>
-									</li>
+							<div className="text-white bg-green-300 h-[65vh] rounded-lg p-8">
+							<p className="text-white p-2 ">
+								Get instant access to skilled tradepeople for your daily needs such as:<br/>
+								<ul>
+								<li >Maintenance</li>
+								<li>Construction</li>
+								<li>Repair</li>
+								<li>Design</li>
+								-And many more
 								</ul>
+
+							</p>
+							<p>
+							Find a Tradespeople Near You
+							<ol>
+							<li>Sign up today.</li>
+							<li>Enter your location and service needs.</li>
+							<li>Browse profiles and reviews.</li>
+							<li>Connect with your chosen expert.</li>
+							</ol>
+							</p>
 							</div>
+
+
 						</div>
-						<div className="col-span-12 lg:col-span-6">
+						<div className="col-span-12 lg:col-span-4">
 							<div className="tab-content">
 								{activeTab === "v-pills-home-tab" && (
 									<div className="block tab-pane">

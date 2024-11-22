@@ -1,39 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { io } from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { io } from "socket.io-client";
 
-const socket = io('http://localhost:5000');
+
+const socket = io("http://localhost:5000");
 
 const Chat = ({ currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [notification, setNotification] = useState('');
+  const [notification, setNotification] = useState("");
+  const [isChatOpen, setIsChatOpen] = useState(false); // For toggling chat popup
 
   useEffect(() => {
-    // Fetch chat history for the selected receiver
-    socket.emit('getChatHistory', { currentUserId, receiverId });
+    socket.emit("getChatHistory", { currentUserId, receiverId });
 
-    socket.on('chatHistory', (history) => {
-      setMessages(history); // Only messages related to the current conversation
+    socket.on("chatHistory", (history) => {
+      setMessages(history);
     });
 
-    socket.on('receiveMessage', (message) => {
-      // Only update messages if the message is for the current conversation
+    socket.on("receiveMessage", (message) => {
       if (message.receiverId === receiverId) {
         setMessages((prevMessages) => [...prevMessages, message]);
       }
     });
 
-    socket.on('newMessageNotification', (data) => {
+    socket.on("newMessageNotification", (data) => {
       setNotification(data.message);
-      if (Notification.permission === 'granted') {
+      if (Notification.permission === "granted") {
         new Notification(data.message);
       }
     });
 
-    socket.on('fileUploaded', (fileUrl) => {
+    socket.on("fileUploaded", (fileUrl) => {
       setMessages((prevMessages) => [
         ...prevMessages,
         { message: <img src={fileUrl} alt="file" className="file-preview" /> },
@@ -41,15 +41,15 @@ const Chat = ({ currentUserId, receiverId }) => {
     });
 
     return () => {
-      socket.off('chatHistory');
-      socket.off('receiveMessage');
-      socket.off('newMessageNotification');
-      socket.off('fileUploaded');
+      socket.off("chatHistory");
+      socket.off("receiveMessage");
+      socket.off("newMessageNotification");
+      socket.off("fileUploaded");
     };
-  }, [currentUserId, receiverId]); // Add receiverId to dependencies so it reloads when it changes
+  }, [currentUserId, receiverId]);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() === '') return;
+    if (newMessage.trim() === "") return;
 
     const messageData = {
       senderId: currentUserId,
@@ -58,9 +58,9 @@ const Chat = ({ currentUserId, receiverId }) => {
       timestamp: new Date(),
     };
 
-    socket.emit('sendMessage', messageData);
+    socket.emit("sendMessage", messageData);
     setMessages((prev) => [...prev, messageData]);
-    setNewMessage('');
+    setNewMessage("");
   };
 
   const handleFileChange = (e) => {
@@ -72,10 +72,10 @@ const Chat = ({ currentUserId, receiverId }) => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
-      const response = await axios.post('/upload', formData, {
+      const response = await axios.post("/upload", formData, {
         onUploadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
           setUploadProgress(progress);
@@ -85,55 +85,85 @@ const Chat = ({ currentUserId, receiverId }) => {
       const messageData = {
         senderId: currentUserId,
         receiverId,
-        message: response.data.fileUrl, // URL of the uploaded file
+        message: response.data.fileUrl,
         timestamp: new Date(),
       };
 
-      socket.emit('sendMessage', messageData);
+      socket.emit("sendMessage", messageData);
       setMessages((prev) => [...prev, messageData]);
 
       setFile(null);
       setUploadProgress(0);
     } catch (error) {
-      console.error('Error uploading file:', error);
+      console.error("Error uploading file:", error);
     }
   };
 
   return (
-    <div className="chat-container">
-      <div className="messages">
-        {messages.map((msg, index) => (
-          <div key={index} className={`message ${msg.senderId === currentUserId ? 'sent' : 'received'}`}>
-            {msg.message.startsWith('http') ? (
-              <img src={msg.message} alt="file" className="file-preview" />
-            ) : (
-              <p>{msg.message}</p>
-            )}
-          </div>
-        ))}
-      </div>
+    <div>
+      {/* Floating Chat Button */}
+      <button
+        onClick={() => setIsChatOpen(!isChatOpen)}
+        className="fixed bottom-4 right-4 bg-purple-600 text-white p-4 rounded-full shadow-lg hover:bg-purple-700"
+      >
+        {isChatOpen ? "Close Chat" : "Chat"}
+      </button>
 
-      {notification && <div className="notification">{notification}</div>}
-
-      {file && (
-        <div>
-          <p>{file.name}</p>
-          <div className="progress-bar">
-            <div style={{ width: `${uploadProgress}%` }} className="progress"></div>
+      {/* Chat Popup */}
+      {isChatOpen && (
+        <div className="fixed bottom-16 right-4 w-80 bg-white rounded-lg shadow-lg p-4">
+          <div className="messages max-h-64 overflow-y-auto">
+            {messages.map((msg, index) => (
+              <div
+                key={index}
+                className={`message ${
+                  msg.senderId === currentUserId ? "sent" : "received"
+                }`}
+              >
+                {msg.message.startsWith("http") ? (
+                  <img src={msg.message} alt="file" className="file-preview" />
+                ) : (
+                  <p>{msg.message}</p>
+                )}
+              </div>
+            ))}
           </div>
+
+          {notification && <div className="notification">{notification}</div>}
+
+          {file && (
+            <div>
+              <p>{file.name}</p>
+              <div className="progress-bar">
+                <div style={{ width: `${uploadProgress}%` }} className="progress"></div>
+              </div>
+            </div>
+          )}
+
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+            className="input w-full border p-2 mb-2"
+          />
+          <input type="file" onChange={handleFileChange} className="file-input mb-2" />
+          {file && (
+            <button
+              onClick={handleFileUpload}
+              className="bg-gray-200 text-black px-4 py-1 rounded-md"
+            >
+              Upload
+            </button>
+          )}
+          <button
+            onClick={handleSendMessage}
+            className="bg-purple-600 text-white px-4 py-2 rounded-md float-right"
+          >
+            Send
+          </button>
         </div>
       )}
-
-      <input
-        type="text"
-        value={newMessage}
-        onChange={(e) => setNewMessage(e.target.value)}
-        placeholder="Type a message..."
-        className="input"
-      />
-      <input type="file" onChange={handleFileChange} className="file-input" />
-      {file && <button onClick={handleFileUpload} className="upload-button">Upload</button>}
-      <button onClick={handleSendMessage} className="send-button">Send</button>
     </div>
   );
 };

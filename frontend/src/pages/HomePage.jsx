@@ -4,6 +4,8 @@ import JobCategories from './home/Jobcategory';
 import JobListing from './home/joblisting';
 import ProcessSection from './home/process';
 import JobSearchFilters from './home/JobSearchFilters';
+import CareerTips from './home/CareerTips';
+import FloatingSupport from './home/FloatingSupport';
 
 function HomePage() {
   return (
@@ -13,7 +15,8 @@ function HomePage() {
       <JobCategories/>
       <JobListing/>
       <ProcessSection/>
-
+      <CareerTips />
+      <FloatingSupport />
     </div>
   );
 }
