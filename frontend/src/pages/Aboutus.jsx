@@ -2,7 +2,7 @@ const AboutUs = () => {
   return (
     <div className="bg-gray-100 min-h-screen ">
       <div className="container mx-auto px-6 py-12">
-        {/* Header Section */}
+       
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-purple-700 mb-4">
             Welcome to JobWing- SkilledHunt

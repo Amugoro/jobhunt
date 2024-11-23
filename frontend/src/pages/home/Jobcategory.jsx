@@ -21,7 +21,7 @@ const JobCategories = () => {
           </div>
         ))}
       </div>
-      <button className="show-all mt-8 px-6 py-3 text-lg font-semibold bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-all duration-200">
+      <button className="show-all mt-8 px-6 py-3 text-lg font-semibold bg-purple-700 text-white rounded-lg hover:bg-green-700 transition-all duration-200">
         Show All
       </button>
     </section>
