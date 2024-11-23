@@ -22,7 +22,7 @@ const JobCategories = () => {
         ))}
       </div>
       <button className="show-all mt-8 px-6 py-3 text-lg font-semibold bg-purple-700 text-white rounded-lg hover:bg-green-700 transition-all duration-200">
-        Show All
+       <a href='/signup'> Show All </a>
       </button>
     </section>
   );

@@ -76,7 +76,7 @@ const Freelance = () => {
                 Sign up now and take your freelance career global!
               </p>
               <button className="mt-6 px-6 py-3 bg-purple-700 text-white rounded-lg shadow-lg hover:bg-green-600 transition duration-300">
-                Get Started
+			  <a href='/signup'>Get Started</a>
               </button>
             </div>
           </div>
