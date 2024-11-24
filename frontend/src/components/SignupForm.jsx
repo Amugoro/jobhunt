@@ -1,6 +1,6 @@
 import  { useState } from "react";
 import { signup } from "../utils/api"; 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function SignupForm() {
@@ -200,9 +200,9 @@ function SignupForm() {
 
         <p className="mt-6 text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-blue-600 hover:underline">
             Log in here
-          </a>
+          </Link>
         </p>
       </div>
     </div>

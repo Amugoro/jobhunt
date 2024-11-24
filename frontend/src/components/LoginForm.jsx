@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { login, forgotPassword } from "../utils/api"; // Import the forgotPassword API
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function LoginForm() {
@@ -122,9 +122,9 @@ function LoginForm() {
 
         <p className="mt-6 text-sm text-center text-gray-600">
         Don't have an account?{" "}
-        <a href="/signup" className="text-blue-600 hover:underline">
+        <Link to="/signup" className="text-blue-600 hover:underline">
           Signup in here
-        </a>
+        </Link>
       </p>
 
         {/* Forgot Password Modal */}
