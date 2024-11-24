@@ -10,7 +10,7 @@ const DonationPage = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await axios.post('https://jobhunt-b23g.onrender.com/api/donate', { email, amount });
+      const response = await axios.post('http://app.jwskilledhunt.org/api/donate', { email, amount });
       window.location.href = response.data.url; // Redirect to Stripe Checkout
     } catch (error) {
       console.error('Error processing donation:', error);

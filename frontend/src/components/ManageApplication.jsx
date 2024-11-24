@@ -7,7 +7,7 @@ const ManageApplications = () => {
   useEffect(() => {
     const fetchApplications = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://jobhunt-b23g.onrender.com/api/jobs/my-applications', {
+      const response = await axios.get('http://app.jwskilledhunt.org/api/jobs/my-applications', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setApplications(response.data);

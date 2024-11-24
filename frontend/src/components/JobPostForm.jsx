@@ -21,7 +21,7 @@ const JobPostForm = ({ onJobPosted }) => {
     try {
       // Make the POST request without sending the Authorization header
       const response = await axios.post(
-        'https://jobhunt-b23g.onrender.com/api/jobs/post',
+        'http://app.jwskilledhunt.org/api/jobs/post',
         { ...formData, skillsRequired: formData.skillsRequired.split(',') }
       );
 

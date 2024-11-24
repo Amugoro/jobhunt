@@ -9,7 +9,7 @@ function SignupForm() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "freelancer", // Default role is freelancer
+    role: "freelancer", 
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);

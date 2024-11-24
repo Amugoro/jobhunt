@@ -77,7 +77,7 @@ const FreelancerProfileForm = () => {
     if (formData.resume) form.append('resume', formData.resume);
   
     try {
-      await axios.post('http://localhost:5000/api/freelancers/profile', form, {
+      await axios.post('http://app.jwskilledhunt.org/api/freelancers/profile', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

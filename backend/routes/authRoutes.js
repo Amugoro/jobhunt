@@ -71,7 +71,7 @@ router.post("/forgot-password", async (req, res) => {
     });
 
     // Create a password reset link
-    const resetLink = `https://jobhunt-1-cdii.onrender.com/reset-password/${resetToken}`;
+    const resetLink = `https://www.jwskilledhunt.org//reset-password/${resetToken}`;
 
     // Prepare the email content
     const emailContent = `

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('https://jobhunt-b23g.onrender.com', {
+const socket = io('http://app.jwskilledhunt.org/', {
   auth: { token: localStorage.getItem('token') },
   transports: ['websocket', 'polling'],
 });

@@ -14,7 +14,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login"; // Redirect to login if no token
+      window.location.href = "/login"; 
     } else {
       fetchProfile(token);
     }
@@ -22,7 +22,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
 
   const fetchProfile = async (token) => {
     try {
-      const response = await axios.get("https://jobhunt-b23g.onrender.com/api/profile/tradeperson", {
+      const response = await axios.get("http://app.jwskilledhunt.org/api/profile/tradeperson", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -34,7 +34,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
   };
 
   const handleProfileUpdated = (updatedProfile) => {
-    setProfile(updatedProfile); // Update profile state when updated
+    setProfile(updatedProfile); 
   };
 
   return (

@@ -35,7 +35,7 @@ const TradepersonProfileForm = ({ onProfileUpdated }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'https://jobhunt-b23g.onrender.com/api/profile/tradeperson',
+        'http://app.jwskilledhunt.org/api/profile/tradeperson',
         formDataToSend,
         {
           headers: {

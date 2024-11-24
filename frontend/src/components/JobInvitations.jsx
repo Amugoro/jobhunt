@@ -7,7 +7,7 @@ const JobInvitations = () => {
   useEffect(() => {
     const fetchInvitations = async () => {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://jobhunt-b23g.onrender.com/api/jobs/invitations', {
+      const response = await axios.get('http://app.jwskilledhunt.org/api/jobs/invitations', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setInvitations(response.data);

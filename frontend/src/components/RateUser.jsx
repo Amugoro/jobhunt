@@ -9,7 +9,7 @@ const RateUser = ({ userId, userType }) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        'https://jobhunt-b23g.onrender.com/api/client/rate',
+        'http://app.jwskilledhunt.org/api/client/rate',
         { userId, userType, rating, review },
         { headers: { Authorization: `Bearer ${token}` } }
       );
