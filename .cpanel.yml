@@ -1,24 +1,9 @@
 ---
 deployment:
   tasks:
-     - export DEPLOY_PATH=/home/user/public_html
+    - export DEPLOY_PATH=/home/user/public_html
     - cp -r * $DEPLOY_PATH
     - npm install --prefix $DEPLOY_PATH
     - npm run build --prefix $DEPLOY_PATH
-    - name: Install Backend Dependencies
-      command: |
-        cd backend
-        npm install
-    - name: Build Frontend
-      command: |
-        cd frontend
-        npm install
-        npm run build
-    - name: Deploy Frontend Build to Public Directory
-      command: |
-        rm -rf /home/YOUR_USERNAME/public_html/*
-        cp -R frontend/build/* /home/YOUR_USERNAME/public_html/
-    - name: Restart Node Server
-      command: |
-        pm2 restart all || pm2 start backend/index.js
+
 
