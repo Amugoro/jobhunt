@@ -31,7 +31,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://app.jwskilledhunt.org',
+    origin: 'https://jwskilledhunt.org',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
