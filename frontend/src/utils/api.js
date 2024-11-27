@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/auth';
+const API_URL = 'https://www.jwskilledhunt.org/api/auth';
 
 export const signup = async (formData) => {
   try {
