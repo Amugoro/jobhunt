@@ -1,9 +1,26 @@
----
-deployment:
-  tasks:
-    - export DEPLOY_PATH=/home/user/public_html
-    - cp -r * $DEPLOY_PATH
-    - npm install --prefix $DEPLOY_PATH
-    - npm run build --prefix $DEPLOY_PATH
+#!/bin/bash
 
+# Define the deployment path
+export DEPLOY_PATH=/home/user/public_html
 
+# Ensure the deployment directory exists
+if [ ! -d "$DEPLOY_PATH" ]; then
+    mkdir -p $DEPLOY_PATH
+fi
+
+# Copy the files to the deployment path
+echo "Copying files to $DEPLOY_PATH"
+cp -r * $DEPLOY_PATH
+
+# Install dependencies in the deployment directory
+echo "Installing dependencies"
+npm install --prefix $DEPLOY_PATH
+
+# Build the project
+echo "Building the project"
+npm run build --prefix $DEPLOY_PATH
+
+# Optionally, restart the application if it's a server
+# pm2 restart app_name
+
+echo "Deployment complete!"
