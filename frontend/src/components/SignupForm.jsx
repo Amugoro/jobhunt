@@ -2,6 +2,7 @@ import  { useState } from "react";
 import { signup } from "../utils/api"; 
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from 'axios';
 
 function SignupForm() {
   const [formData, setFormData] = useState({
@@ -39,11 +40,13 @@ function SignupForm() {
       return;
     }
 
-    const { success, user, message } = await signup(formData);
+    const { success, user, message, token } = await signup(formData);
     if (success) {
       alert(`Welcome ${user.fullName}`);
 
-  
+      localStorage.setItem("authToken", token);
+      // eslint-disable-next-line no-undef
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Redirect based on the user's role
       console.log(`Redirecting to dashboard for role: ${user.role}`);
       if (user.role === "client") {
@@ -157,7 +160,7 @@ function SignupForm() {
                   onChange={handleChange}
                   className="mr-2"
                 />
-                Client
+                Employer
               </label>
               <label className="flex items-center">
                 <input

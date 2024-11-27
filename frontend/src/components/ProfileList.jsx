@@ -16,7 +16,7 @@ const ProfileList = () => {
     const fetchProfiles = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://app.jwskilledhunt.org/api/client/profiles', {
+        const response = await axios.get('/api/client/profiles', {
           headers: { Authorization: `Bearer ${token}` },
         });
         setFreelancers(response.data.freelancers);

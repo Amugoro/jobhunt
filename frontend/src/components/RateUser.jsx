@@ -9,7 +9,7 @@ const RateUser = ({ userId, userType }) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        'http://app.jwskilledhunt.org/api/client/rate',
+        '/api/client/rate',
         { userId, userType, rating, review },
         { headers: { Authorization: `Bearer ${token}` } }
       );

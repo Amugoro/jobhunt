@@ -18,16 +18,20 @@ const userRoutes = require('./routes/userRoutes');
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
+const bodyParser = require("body-parser");
 
 
 dotenv.config();
 connectDB();
 
+
+
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://www.jwskilledhunt.org/',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
@@ -42,13 +46,14 @@ const upload = multer({ dest: 'uploads/' });
 
 // Define routes
 app.use("/api/jobs", jobRoutes);
-app.use("/api/freelancers", freelancerRoutes);
+app.use("/api/freelancer", freelancerRoutes);
 app.use("/api", jobListingsRoute);
 app.use("/api/auth", authRoutes);
 app.use('/api/client', clientRoutes);
 app.use('/api/chat', chat);
 app.use('/api/user', userRoutes);
 app.use('/api/tradepersons', tradePersonRoutes);
+app.use(bodyParser.json());
 
 // Serve static files (uploaded files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

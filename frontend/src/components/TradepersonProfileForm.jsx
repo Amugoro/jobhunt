@@ -35,7 +35,7 @@ const TradepersonProfileForm = ({ onProfileUpdated }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://app.jwskilledhunt.org/api/profile/tradeperson',
+        '/api/profile/tradeperson',
         formDataToSend,
         {
           headers: {

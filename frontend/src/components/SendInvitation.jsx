@@ -8,7 +8,7 @@ const SendInvitation = ({ recipientId, recipientType }) => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        'http://app.jwskilledhunt.org/api/client/send-invitation',
+        '/api/client/send-invitation',
         { recipientId, recipientType, message },
         { headers: { Authorization: `Bearer ${token}` } }
       );

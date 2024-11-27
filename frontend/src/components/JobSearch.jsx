@@ -39,7 +39,7 @@ const JobSearch = () => {
     const token = localStorage.getItem('token');
     try {
       await axios.post(
-        `http://app.jwskilledhunt.org/api/jobs/apply/${jobId}`,
+        `/api/jobs/apply/${jobId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -53,7 +53,7 @@ const JobSearch = () => {
   const fetchAppliedJobs = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('http://app.jwskilledhunt.org/api/jobs/applied', {
+      const response = await axios.get('/api/jobs/applied', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAppliedJobs(response.data.map((job) => job._id));
@@ -65,7 +65,7 @@ const JobSearch = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://app.jwskilledhunt.org/api/jobs', {
+      const response = await axios.get('/api/jobs', {
         params: { category, location, search: searchQuery  },  
       });
 

@@ -6,7 +6,7 @@ import Chat from "../components/Chat";
 import NotificationBell from "./NotificationBell";
 import JobInvitations from "./JobInvitations";
 import ManageApplications from "./ManageApplication";
-import JobSearch from "./JobSearch";
+
 
 const TradepersonDashboard = ({ tradepersonId, clientId}) => {
   const [profile, setProfile] = useState(null);
@@ -22,7 +22,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
 
   const fetchProfile = async (token) => {
     try {
-      const response = await axios.get("http://app.jwskilledhunt.org/api/profile/tradeperson", {
+      const response = await axios.get("/api/profile/tradeperson", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -42,7 +42,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Freelancer Dashboard</h2>
         <NotificationBell />
-        <JobSearch />
+
         <hr className="my-6" />
         <JobInvitations />
         <hr className="my-6" />

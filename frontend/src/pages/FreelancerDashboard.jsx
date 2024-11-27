@@ -3,7 +3,7 @@ import Chat from "../components/Chat";
 import NotificationBell from "../components/NotificationBell";
 import ManageApplications from "../components/ManageApplication";
 import JobInvitations from "../components/JobInvitations";
-import JobSearch from "../components/JobSearch";
+
 
 const FreelancerDashboard = ({  freelancerId, clientId }) => {
   return (
@@ -11,11 +11,10 @@ const FreelancerDashboard = ({  freelancerId, clientId }) => {
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold mb-6">Freelancer Dashboard</h1>
         <NotificationBell />
-        <button><JobSearch /></button>
         <hr className="my-6" />
-        <button><JobInvitations /></button>
+        <JobInvitations />
         <hr className="my-6" />
-        <button><ManageApplications /></button> 
+        <ManageApplications /> 
       </div>
 
       <FreelancerProfileForm />

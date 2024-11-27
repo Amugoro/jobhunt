@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('http://app.jwskilledhunt.org/', {
+const socket = io('http://localhost:5000', {
   auth: { token: localStorage.getItem('token') },
   transports: ['websocket', 'polling'],
 });
