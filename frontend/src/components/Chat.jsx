@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 
 
-const socket = io("http://localhost:5000");
+const socket = io("https://jobhunt-b23g.onrender.com");
 
 const Chat = ({ currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);

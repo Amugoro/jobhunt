@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://app.jwskilledhunt.org/api/auth';
+const API_URL = 'https://jobhunt-b23g.onrender.com/api/auth';
 
 export const signup = async (formData) => {
   try {

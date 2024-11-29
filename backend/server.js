@@ -246,6 +246,9 @@ io.on('connection', (socket) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => {
+
+// This ensures it listens to all interfaces (0.0.0.0) which includes public domain
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
+
