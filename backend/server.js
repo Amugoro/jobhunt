@@ -31,15 +31,15 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://jwskilledhunt.org',
-    methods: ['GET', 'POST'],
+    origin: ' http://localhost:3000 ',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
   },
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 // Middleware to handle file uploads
 const upload = multer({ dest: 'uploads/' });
@@ -73,17 +73,17 @@ const authMiddleware = (socket, next) => {
   }
 };
 
-// Apply middleware to Socket.IO
+
 io.use(authMiddleware);
 
 // Socket.IO connection
 io.on("connection", (socket) => {
   console.log(`User connected: ${socket.user.id}`);
 
-  // Join user's room for personalized communication
+
   socket.join(socket.user.id);
 
-  // Get chat history for a specific user and receiver
+ 
   socket.on('getChatHistory', async ({ currentUserId, receiverId }) => {
     try {
       const history = await Message.find({
@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
       const newMessage = new Message(messageData);
       await newMessage.save();
       socket.to(messageData.receiverId).emit('receiveMessage', messageData);
-      socket.to(messageData.senderId).emit('receiveMessage', messageData); // Optionally notify the sender
+      socket.to(messageData.senderId).emit('receiveMessage', messageData); 
     } catch (error) {
       console.error('Error saving message:', error);
     }
@@ -192,7 +192,7 @@ io.on('connection', (socket) => {
     io.to(data.recruiterId).emit('new_notification', newNotification);
   });
 
-  const users = {}; 
+  const users = {};
 
   socket.on('userConnected', (userId) => {
     users[userId] = socket.id;
@@ -246,9 +246,6 @@ io.on('connection', (socket) => {
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-
-// This ensures it listens to all interfaces (0.0.0.0) which includes public domain
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
-

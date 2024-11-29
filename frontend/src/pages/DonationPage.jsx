@@ -11,7 +11,7 @@ const DonationPage = () => {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/donate', { email, amount });
-      window.location.href = response.data.url; // Redirect to Stripe Checkout
+      window.location.href = response.data.url; 
     } catch (error) {
       console.error('Error processing donation:', error);
       alert('Something went wrong, please try again later.');

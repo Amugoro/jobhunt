@@ -25,7 +25,7 @@ router.post("/signup", async (req, res) => {
           .json({ success: false, message: "User already registered" });
       }
   
-      const hashedPassword = await bcrypt.hash(password, 10); // bcryptjs hashing
+      const hashedPassword = await bcrypt.hash(password, 10); 
       console.log("Generated Hash for Signup:", hashedPassword);
       const newUser = new User({
         fullName,
@@ -63,7 +63,7 @@ router.post("/signup", async (req, res) => {
       console.log("Plain Password:", password);
       console.log("Stored Hash from DB:", user.password);
   
-      const isMatch = await bcrypt.compare(password, user.password); // bcryptjs comparison
+      const isMatch = await bcrypt.compare(password, user.password); 
       console.log("Password Comparison Result:", isMatch);
       if (!isMatch) {
         return res
@@ -99,7 +99,7 @@ router.post("/forgot-password", async (req, res) => {
     });
 
     // Create a password reset link
-    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetLink = `/reset-password/${resetToken}`;
 
     // Prepare the email content
     const emailContent = `

@@ -88,7 +88,7 @@ const FreelancerProfileForm = () => {
 
     try {
       // **Send Data to Backend**
-      await axios.post('http://localhost:5000/api/freelancer/profile', form, {
+      await axios.post('/api/freelancer/profile', form, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

@@ -13,7 +13,7 @@ exports.createJob = async (req, res) => {
       subcategory,
       skillsRequired,
       location,
-      client: req.user.id, // assuming user is authenticated
+      client: req.user.id, 
     });
 
     res.status(201).json({

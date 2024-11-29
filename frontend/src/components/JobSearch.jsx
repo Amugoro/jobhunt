@@ -19,7 +19,7 @@ const JobSearch = () => {
     // Check if the user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/login'); // Redirect to login if not logged in
+      navigate('/login'); 
     } else {
       // Fetch user skills from the backend
       axios
@@ -83,7 +83,7 @@ const JobSearch = () => {
   };
 
   const handleJobPosted = (newJob) => {
-    setJobs((prevJobs) => [newJob, ...prevJobs]); // Add the new job to the beginning of the job list
+    setJobs((prevJobs) => [newJob, ...prevJobs]); 
   };
 
   useEffect(() => {

@@ -45,7 +45,7 @@ const TradepersonProfileForm = ({ onProfileUpdated }) => {
         }
       );
       alert('Profile created successfully');
-      onProfileUpdated(response.data.profile); // Notify parent component to update profile view
+      onProfileUpdated(response.data.profile);
     } catch (error) {
       console.error('Error updating profile', error);
       alert('Failed to update profile');

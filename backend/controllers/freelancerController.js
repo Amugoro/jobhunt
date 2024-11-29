@@ -1,6 +1,6 @@
 
 const Freelancer = require('../models/Freelancer');
-const cloudinary = require('cloudinary').v2; // Assuming cloudinary is used for file uploads
+const cloudinary = require('cloudinary').v2; 
 
 // Create or Update Freelancer Profile
 exports.createOrUpdateProfile = async (req, res) => {

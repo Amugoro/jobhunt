@@ -37,21 +37,21 @@ router.get('/:userId', async (req, res) => {
 
 // Post a new message (with or without file)
 router.post('/', async (req, res) => {
-  const { senderId, receiverId, message, fileUrl } = req.body;  // File URL will be passed if a file is uploaded
+  const { senderId, receiverId, message, fileUrl } = req.body;  
 
   try {
-    // Create a new message entry
+
     const newMessage = new Message({
       senderId,
       receiverId,
       message,
-      fileUrl,  // Attach file URL if exists
+      fileUrl,  
       timestamp: new Date(),
     });
 
-    await newMessage.save();  // Save the message to the database
+    await newMessage.save();  
 
-    res.status(201).json(newMessage);  // Respond with the new message
+    res.status(201).json(newMessage);  
   } catch (error) {
     console.error('Error posting message:', error);
     res.status(500).json({ message: 'Error posting message' });
@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
 router.post('/upload', upload.single('file'), (req, res) => {
   try {
     const fileUrl = '/uploads/' + req.file.filename;
-    res.status(200).json({ fileUrl });  // Return the file URL to the client
+    res.status(200).json({ fileUrl });  
   } catch (error) {
     console.error('Error uploading file:', error);
     res.status(500).json({ message: 'Error uploading file' });

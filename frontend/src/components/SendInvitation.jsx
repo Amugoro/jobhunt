@@ -13,7 +13,7 @@ const SendInvitation = ({ recipientId, recipientType }) => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert('Invitation sent successfully');
-      setMessage(''); // Clear the message field after sending
+      setMessage('');
     } catch (error) {
       console.error('Failed to send invitation', error);
       alert('Failed to send invitation');

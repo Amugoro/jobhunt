@@ -2,8 +2,7 @@ exports.registerUser = async (req, res) => {
     // Existing signup logic
     const { fullName, email, password } = req.body;
 
-    // Validation and hashing password logic
-    // ...
+   
     await newUser.save();
     res.status(201).json({ message: `Welcome, ${fullName}`, user: { fullName, email } });
 };

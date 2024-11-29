@@ -3,7 +3,7 @@ const User = require('../models/User');
 const { JWT_SECRET } = require('../keys');
 
 exports.protect = async (req, res, next) => {
-  const { token } = req.body; // Extract token from the request body
+  const { token } = req.body;
   console.log('Received Token:', token);
 
   if (!token) {

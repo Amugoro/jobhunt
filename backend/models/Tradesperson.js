@@ -8,14 +8,14 @@ const TradespersonSchema = new mongoose.Schema({
     required: true,
   },
   profilePicture: {
-    type: String, // URL of the uploaded image
+    type: String, 
   },
   objective: {
     type: String,
     trim: true,
   },
   skills: {
-    type: [String], // Array of skills
+    type: [String], 
     required: true,
   },
   experience: [

@@ -7,7 +7,7 @@ const router = express.Router();
 // Fetch user skills
 router.get('/skills', protect, async (req, res) => {
   try {
-    // Assuming the user ID is attached to the request by the protect middleware
+    
     const user = await User.findById(req.user.id).select('skills');
 
     if (!user) {

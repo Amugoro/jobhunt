@@ -24,7 +24,7 @@ router.get('/client/download-resume/:id', auth, async (req, res) => {
     if (!freelancer || !freelancer.resume) {
       return res.status(404).json({ message: 'Resume not found' });
     }
-    res.download(freelancer.resume); // Ensure the resume field has the correct file path
+    res.download(freelancer.resume); 
   } catch (error) {
     res.status(500).json({ message: 'Failed to download resume' });
   }

@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 
 
-const socket = io("https://jobhunt-b23g.onrender.com");
+const socket = io("http://localhost:5000");
 
 const Chat = ({ currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
@@ -11,7 +11,7 @@ const Chat = ({ currentUserId, receiverId }) => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [notification, setNotification] = useState("");
-  const [isChatOpen, setIsChatOpen] = useState(false); // For toggling chat popup
+  const [isChatOpen, setIsChatOpen] = useState(false); 
 
   useEffect(() => {
     socket.emit("getChatHistory", { currentUserId, receiverId });
