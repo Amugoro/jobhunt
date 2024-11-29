@@ -192,7 +192,7 @@ io.on('connection', (socket) => {
     io.to(data.recruiterId).emit('new_notification', newNotification);
   });
 
-  const users = {}; // A map to track connected users by userId
+  const users = {}; 
 
   socket.on('userConnected', (userId) => {
     users[userId] = socket.id;
