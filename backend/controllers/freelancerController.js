@@ -40,7 +40,7 @@ exports.createOrUpdateProfile = async (req, res) => {
 // Get Freelancer Profile
 exports.getProfile = async (req, res) => {
   try {
-    const profile = await Freelancer.findOne({ user: req.user.id });
+    const profile = await Freelancer.findOne({ user: req.user._id });
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
     res.json(profile);
