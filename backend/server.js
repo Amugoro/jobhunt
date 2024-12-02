@@ -39,7 +39,7 @@ const io = new Server(server, {
 });
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: 'https://www.jwskilledhunt.org' }));
 
 // Middleware to handle file uploads
 const upload = multer({ dest: 'uploads/' });
