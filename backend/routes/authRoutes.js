@@ -14,7 +14,7 @@ const { JWT_SECRET } = require('../keys');
 console.log(JWT_SECRET)
 
 // Signup Route
-router.post("/signup", async (req, res) => {
+router.post("/signup",  async (req, res) => {
     const { fullName, email, password, role } = req.body;
   
     try {

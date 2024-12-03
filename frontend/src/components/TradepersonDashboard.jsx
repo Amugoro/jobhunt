@@ -6,10 +6,15 @@ import Chat from "../components/Chat";
 import NotificationBell from "./NotificationBell";
 import JobInvitations from "./JobInvitations";
 import ManageApplications from "./ManageApplication";
+import DocumentVerification from "../verify/DocumentVerification";
+import VerifiedBadge  from "../verify/VerifiedBadge";
+import {UnverifiedBadge} from '../verify/UnverifiedBadge'
 
 
 const TradepersonDashboard = ({ tradepersonId, clientId}) => {
   const [profile, setProfile] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
+  const [showVerificationForm, setShowVerificationForm] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -22,17 +27,27 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
 
   const fetchProfile = async (token) => {
     try {
-      const response = await axios.get("/api/profile/tradeperson", {
+      const response = await axios.get(`/api/profile/tradeperson/${tradepersonId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setProfile(response.data.profile);
+      const { profile } = response.data;
+      setProfile(profile);
+      setIsVerified(profile?.isVerified || false); // Assume profile includes verification status
     } catch (error) {
       console.error("Error fetching profile", error);
     }
   };
 
+  const handleVerificationComplete = (data) => {
+    if (data.status === "verified") {
+      setIsVerified(true);
+      setShowVerificationForm(false);
+    }
+  };
+
+  
   const handleProfileUpdated = (updatedProfile) => {
     setProfile(updatedProfile); 
   };
@@ -48,6 +63,34 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
         <hr className="my-6" />
         <ManageApplications />
       </div>
+
+       {/* Verification Badge */}
+       <div className="mb-6">
+       {isVerified ? (
+         <VerifiedBadge />
+       ) : (
+         <>
+           <UnverifiedBadge />
+           <button
+             onClick={() => setShowVerificationForm(!showVerificationForm)}
+             className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+           >
+             {showVerificationForm ? "Cancel Verification" : "Verify Now"}
+           </button>
+         </>
+       )}
+     </div>
+
+     {/* Document Verification Form */}
+     {showVerificationForm && (
+       <div className="mb-6">
+         <DocumentVerification
+         
+           userId={tradepersonId}
+           onVerificationComplete={handleVerificationComplete}
+         />
+       </div>
+     )}
 
       {profile ? (
         <div>

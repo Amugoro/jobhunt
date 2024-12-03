@@ -23,6 +23,9 @@ import FreelancerDashboard from "./pages/FreelancerDashboard";
 import ClientDashboard from "./components/ClientDashboard";
 import DonationPage from "./pages/DonationPage";
 import "./app.css";
+import AdminDashboard from "./admin/AdminDashboard";
+import AdminLogin from "./admin/AdminLogin";
+import SubadminDashboard from "./admin/SubadminDashboard";
 
 // Protected Route component
 function ProtectedRoute({ element: Component, ...rest }) {
@@ -54,6 +57,10 @@ function App() {
         <Navbar />
         <div className="page-content">
         <Routes>
+         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+         <Route path="/Subadmin-Dashboard" element={<SubadminDashboard/>} />
+         <Route path="/admin-login" element={<AdminLogin />} />
+
           
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
@@ -75,6 +82,8 @@ function App() {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/donation-page" element={<DonationPage />} />
+
+            
 
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
