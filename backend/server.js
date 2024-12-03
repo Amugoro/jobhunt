@@ -36,17 +36,27 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
+<<<<<<< HEAD
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
+=======
+    origin: ' https://www.jwskilledhunt.org ',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type'],
+>>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
     credentials: true,
   },
 });
 
 // Middleware
 app.use(express.json());
+<<<<<<< HEAD
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+=======
+app.use(cors({ origin: 'https://www.jwskilledhunt.org' }));
+>>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
 
 // File upload configuration
 const upload = multer({ dest: "uploads/" });

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User"); 
+const User = require("../models/User");
 const sendEmail = require("../utils/emailService");
 const { protect } = require("../middleware/authMiddleware");
 const { JWT_SECRET } = require('../keys');
@@ -10,10 +10,11 @@ const { JWT_SECRET } = require('../keys');
 
 
 // Default JWT secret if not provided in .env
- 
+
 console.log(JWT_SECRET)
 
 // Signup Route
+<<<<<<< HEAD
 router.post("/signup",  async (req, res) => {
     const { fullName, email, password, role } = req.body;
   
@@ -59,28 +60,79 @@ router.post("/signup",  async (req, res) => {
           .status(400)
           .json({ success: false, message: "User not found" });
       }
+=======
+router.post("/signup", async (req, res) => {
+  const { fullName, email, password, role } = req.body;
+>>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
 
-      console.log("Plain Password:", password);
-      console.log("Stored Hash from DB:", user.password);
-  
-      const isMatch = await bcrypt.compare(password, user.password); 
-      console.log("Password Comparison Result:", isMatch);
-      if (!isMatch) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Invalid email or password" });
-      }
-  
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      });
-  
-      res.json({ success: true, user, token });
-    } catch (error) {
-      console.error("Error during login:", error);
-      res.status(500).json({ success: false, message: "Server error" });
+  if (!fullName || !email || !password || !role) {
+    return res.status(400).json({ success: false, message: "All fields are required" });
+  }
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User already registered" });
     }
-  });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("Generated Hash for Signup:", hashedPassword);
+    const newUser = new User({
+      fullName,
+      email,
+      password: hashedPassword,
+      role,
+    });
+
+    await newUser.save();
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    console.log("JWT_SECRET used for signing:", process.env.JWT_SECRET);
+
+    res.status(201).json({ success: true, user: newUser, token });
+  } catch (error) {
+    console.error("Error during signup:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Login Route
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
+    }
+
+    console.log("Plain Password:", password);
+    console.log("Stored Hash from DB:", user.password);
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Password Comparison Result:", isMatch);
+    if (!isMatch) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.json({ success: true, user, token });
+  } catch (error) {
+    console.error("Error during login:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
 
 // Forgot Password route
 router.post("/forgot-password", async (req, res) => {
