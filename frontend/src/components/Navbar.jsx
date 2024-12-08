@@ -52,12 +52,15 @@ function Navbar() {
           ) : (
             <>
               <li>
-                <Link to={`/${user.role}-dashboard`} className="hover:text-blue-600">
-                  {user.role} Dashboard
-                </Link>
+               
               </li>
               <li className="flex items-center space-x-4">
-                <FaUser title="Profile" className="text-blue-600 cursor-pointer hover:text-blue-800" />
+              <Link to={`/${user.role}-dashboard`} className="hover:text-blue-600">
+              <FaUser
+              title="Profile"
+              className="text-blue-600 cursor-pointer hover:text-blue-800"
+            />
+              </Link>
                 <FaBell title="Notifications" className="text-yellow-600 cursor-pointer hover:text-yellow-800" />
                 <FaSignOutAlt
                   title="Logout"
@@ -119,16 +122,14 @@ function Navbar() {
               </li>
             ) : (
               <>
-                <li>
-                  <Link to={`/${user.role}-dashboard`} onClick={toggleMenu} className="hover:text-blue-600">
-                    {user.role} Dashboard
-                  </Link>
-                </li>
+               
                 <li className="flex items-center space-x-4">
-                  <FaUser
-                    title="Profile"
-                    className="text-blue-600 cursor-pointer hover:text-blue-800"
-                  />
+                   <Link to={`/${user.role}-dashboard`} className="hover:text-blue-600">
+                <FaUser
+                title="Profile"
+                className="text-blue-600 cursor-pointer hover:text-blue-800"
+              />
+                </Link>
                   <FaBell
                     title="Notifications"
                     className="text-yellow-600 cursor-pointer hover:text-yellow-800"

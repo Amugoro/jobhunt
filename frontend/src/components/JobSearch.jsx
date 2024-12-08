@@ -9,28 +9,28 @@ const JobSearch = () => {
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [skills, setSkills] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); 
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [userRole, setUserRole] = useState(null); // Track user role
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    // Check if the user is logged in
     const token = localStorage.getItem('token');
     if (!token) {
-      navigate('/login'); 
+      navigate('/login');
     } else {
-      // Fetch user skills from the backend
+      // Fetch user details
       axios
-        .get('http://app.jwskilledhunt.org/api/user/skills', { headers: { Authorization: `Bearer ${token}` } })
+        .get('/api/user', { headers: { Authorization: `Bearer ${token}` } })
         .then((response) => {
           setSkills(response.data.skills);
+          setUserRole(response.data.role); 
           fetchJobs();
           fetchAppliedJobs();
         })
         .catch((error) => {
-          console.error('Error fetching skills:', error);
+          console.error('Error fetching user details:', error);
         });
     }
   }, [navigate]);
@@ -66,7 +66,7 @@ const JobSearch = () => {
     setLoading(true);
     try {
       const response = await axios.get('/api/jobs', {
-        params: { category, location, search: searchQuery  },  
+        params: { category, location, search: searchQuery },
       });
 
       // Filter jobs based on user's skills
@@ -83,7 +83,7 @@ const JobSearch = () => {
   };
 
   const handleJobPosted = (newJob) => {
-    setJobs((prevJobs) => [newJob, ...prevJobs]); 
+    setJobs((prevJobs) => [newJob, ...prevJobs]);
   };
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const JobSearch = () => {
       </div>
 
       {/* Job Posting Form (Visible only to Clients) */}
-      <JobPostForm onJobPosted={handleJobPosted} />
+      {userRole === 'client' && <JobPostForm onJobPosted={handleJobPosted} />}
 
       {/* Job Listings */}
       {loading ? (

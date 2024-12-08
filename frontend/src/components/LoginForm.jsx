@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { login, forgotPassword } from "../utils/api"; // Import the forgotPassword API
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
 
 function LoginForm() {
+  const { loggedIn } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -26,8 +29,11 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { success, user, message } = await login(formData);
+    const { success, user, message, token } = await login(formData);
     if (success) {
+      loggedIn(user);
+      localStorage.setItem('token', token);
+
       alert(`Welcome back ${user.fullName}`);
       // Redirect based on role
       if (user.role === "client") {
@@ -121,11 +127,11 @@ function LoginForm() {
         </p>
 
         <p className="mt-6 text-sm text-center text-gray-600">
-        Don't have an account?{" "}
-        <Link to="/signup" className="text-blue-600 hover:underline">
-          Signup in here
-        </Link>
-      </p>
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Signup in here
+          </Link>
+        </p>
 
         {/* Forgot Password Modal */}
         {showForgotPassword && (

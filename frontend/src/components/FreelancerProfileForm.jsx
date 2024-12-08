@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { createOrUpdateFreelancerProfile } from '../utils/api';
 
 const FreelancerProfileForm = () => {
-  
+
   const [formData, setFormData] = useState({
     objective: '',
-    skills: '', 
-    experience: [], 
-    profilePicture: null, 
-    resume: null, 
+    skills: '',
+    experience: [],
+    profilePicture: null,
+    resume: null,
   });
 
   const [experiences, setExperiences] = useState([
@@ -16,21 +17,21 @@ const FreelancerProfileForm = () => {
   ]);
 
   const [preview, setPreview] = useState({
-    profilePicture: '', 
-    resume: '', 
-    skills: [], 
-    experiences: [], 
-    objective: '', 
+    profilePicture: '',
+    resume: '',
+    skills: [],
+    experiences: [],
+    objective: '',
   });
 
- 
 
- 
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    
+
     if (name === 'skills') {
       setPreview({
         ...preview,
@@ -41,12 +42,12 @@ const FreelancerProfileForm = () => {
     }
   };
 
-  
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setFormData({ ...formData, [e.target.name]: file });
 
-    
+
     if (e.target.name === 'profilePicture' && file) {
       const reader = new FileReader();
       reader.onloadend = () => setPreview({ ...preview, profilePicture: reader.result });
@@ -54,7 +55,7 @@ const FreelancerProfileForm = () => {
     }
   };
 
-  
+
   const handleExperienceChange = (index, field, value) => {
     const updatedExperiences = [...experiences];
     updatedExperiences[index][field] = value;
@@ -62,7 +63,7 @@ const FreelancerProfileForm = () => {
     setPreview({ ...preview, experiences: updatedExperiences });
   };
 
- 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -78,7 +79,7 @@ const FreelancerProfileForm = () => {
     }*/
 
     // **Create Form Data**
-    const token = localStorage.getItem('token');
+    // const token = localStorage.getItem('token');
     const form = new FormData();
     form.append('objective', formData.objective);
     form.append('skills', formData.skills);
@@ -88,13 +89,28 @@ const FreelancerProfileForm = () => {
 
     try {
       // **Send Data to Backend**
-      await axios.post('/api/freelancer/profile', form, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      alert('Profile created/updated successfully!');
+      // await axios.post('http://localhost:5000/api/freelancer/profile', form, { 
+      //   headers: {
+      //     // 'Content-Type': 'multipart/form-data',
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+
+      const fd = {
+        objective: formData.objective,
+        skills: formData.skills,
+        experience: JSON.stringify(experiences)
+      };
+
+      const encodedData = new URLSearchParams(fd).toString();
+
+      const { success, profile, message } = await createOrUpdateFreelancerProfile(encodedData);
+      if (success) {
+        alert('Profile created/updated successfully!');
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error(error);
       alert('Error creating profile');

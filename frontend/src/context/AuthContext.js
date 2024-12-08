@@ -7,16 +7,14 @@ export function AuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    
     const loggedInUser = JSON.parse(localStorage.getItem('user'));
     if (loggedInUser) {
       setUser(loggedInUser);
     }
   }, []);
 
-  const login = (userData) => {
+  const loggedIn = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
   };
 
   const logout = () => {
@@ -25,7 +23,7 @@ export function AuthContextProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loggedIn, logout }}>
       {children}
     </AuthContext.Provider>
   );

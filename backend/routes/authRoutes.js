@@ -14,60 +14,8 @@ const { JWT_SECRET } = require('../keys');
 console.log(JWT_SECRET)
 
 // Signup Route
-<<<<<<< HEAD
-router.post("/signup",  async (req, res) => {
-    const { fullName, email, password, role } = req.body;
-  
-    try {
-      const existingUser = await User.findOne({ email });
-      if (existingUser) {
-        return res
-          .status(400)
-          .json({ success: false, message: "User already registered" });
-      }
-  
-      const hashedPassword = await bcrypt.hash(password, 10); 
-      console.log("Generated Hash for Signup:", hashedPassword);
-      const newUser = new User({
-        fullName,
-        email,
-        password: hashedPassword,
-        role,
-      });
-  
-      await newUser.save();
-  
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      });
-      console.log("JWT_SECRET used for signing:", process.env.JWT_SECRET);
-  
-      res.json({ success: true, user: newUser, token });
-    } catch (error) {
-      console.error("Error during signup:", error);
-      res.status(500).json({ success: false, message: "Server error" });
-    }
-  });
-  
-  // Login Route
-  router.post("/login", async (req, res) => {
-    const { email, password } = req.body;
-  
-    try {
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res
-          .status(400)
-          .json({ success: false, message: "User not found" });
-      }
-=======
 router.post("/signup", async (req, res) => {
   const { fullName, email, password, role } = req.body;
->>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
-
-  if (!fullName || !email || !password || !role) {
-    return res.status(400).json({ success: false, message: "All fields are required" });
-  }
 
   try {
     const existingUser = await User.findOne({ email });
@@ -93,12 +41,60 @@ router.post("/signup", async (req, res) => {
     });
     console.log("JWT_SECRET used for signing:", process.env.JWT_SECRET);
 
-    res.status(201).json({ success: true, user: newUser, token });
+    res.json({ success: true, user: newUser, token });
   } catch (error) {
     console.error("Error during signup:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
+
+// Login Route
+// router.post("/login", async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "User not found" });
+//     }
+
+
+//     if (!fullName || !email || !password || !role) {
+//       return res.status(400).json({ success: false, message: "All fields are required" });
+//     }
+
+//     try {
+//       const existingUser = await User.findOne({ email });
+//       if (existingUser) {
+//         return res
+//           .status(400)
+//           .json({ success: false, message: "User already registered" });
+//       }
+
+//       const hashedPassword = await bcrypt.hash(password, 10);
+//       console.log("Generated Hash for Signup:", hashedPassword);
+//       const newUser = new User({
+//         fullName,
+//         email,
+//         password: hashedPassword,
+//         role,
+//       });
+
+//       await newUser.save();
+
+//       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+//         expiresIn: "1d",
+//       });
+//       console.log("JWT_SECRET used for signing:", process.env.JWT_SECRET);
+
+//       res.status(201).json({ success: true, user: newUser, token });
+//     } catch (error) {
+//       console.error("Error during signup:", error);
+//       res.status(500).json({ success: false, message: "Server error" });
+//     }
+//   });
 
 // Login Route
 router.post("/login", async (req, res) => {

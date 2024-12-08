@@ -11,7 +11,7 @@ const fs = require('fs');
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const Message = require("./models/Message");
-const { verifyDocument } = require('./controllers/verification'); 
+const { verifyDocument } = require('./controllers/verification');
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
@@ -36,27 +36,17 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-<<<<<<< HEAD
     origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
-=======
-    origin: ' https://www.jwskilledhunt.org ',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type'],
->>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
     credentials: true,
   },
 });
 
 // Middleware
 app.use(express.json());
-<<<<<<< HEAD
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-=======
-app.use(cors({ origin: 'https://www.jwskilledhunt.org' }));
->>>>>>> 46acd27ae8bb517199562216056b6ffa3630cc46
 
 // File upload configuration
 const upload = multer({ dest: "uploads/" });
@@ -157,7 +147,7 @@ io.on("connection", (socket) => {
     } catch (error) {
       console.error("Error fetching chat history:", error);
     }
-});
+  });
 
   // Send message
   socket.on("sendMessage", async (messageData) => {
@@ -184,10 +174,10 @@ app.use((err, req, res, next) => {
 
 // Create Nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail', 
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, 
-    pass: process.env.EMAIL_PASS, 
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -221,7 +211,7 @@ app.post('/send-feedback', async (req, res) => {
 
   try {
     // Send email to the admin or a designated email address
-    const adminEmail = 'admin@example.com'; 
+    const adminEmail = 'admin@example.com';
     await sendEmail(adminEmail, 'Feedback Form Submission', emailContent);
     res.status(200).json({ message: 'Feedback sent successfully!' });
   } catch (error) {
