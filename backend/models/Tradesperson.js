@@ -8,25 +8,20 @@ const TradespersonSchema = new mongoose.Schema({
     required: true,
   },
   profilePicture: {
-    type: String, 
+    type: String,
   },
   objective: {
     type: String,
     trim: true,
   },
-  skills: {
-    type: [String], 
+  tradeSkills: {
+    type: [String],
     required: true,
   },
-  experience: [
-    {
-      company: String,
-      role: String,
-      startDate: Date,
-      endDate: Date,
-      description: String,
-    },
-  ],
+  experience: {
+    type: [String],
+    required: true,
+  },
   ratings: [
     {
       clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

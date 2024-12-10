@@ -4,13 +4,14 @@ const Freelancer = require('../models/Freelancer');
 const Tradesperson = require('../models/Tradesperson');
 const Invitation = require('../models/Invitation');
 const auth = require('../middleware/auth');
+const User = require('../models/User');
 
 // 1. Get list of freelancers and tradespersons
 router.get('/profiles', auth, async (req, res) => {
   try {
     const freelancers = await Freelancer.find({});
     const tradespersons = await Tradesperson.find({});
-    res.json({ freelancers, tradespersons });
+    res.json({ success: true, freelancers, tradespersons });
   } catch (error) {
     res.status(500).json({ message: 'Failed to retrieve profiles' });
   }
@@ -18,13 +19,13 @@ router.get('/profiles', auth, async (req, res) => {
 
 
 // 2. Download resume
-router.get('/client/download-resume/:id', auth, async (req, res) => {
+router.get('/download-resume/:id', auth, async (req, res) => {
   try {
     const freelancer = await Freelancer.findById(req.params.id);
     if (!freelancer || !freelancer.resume) {
       return res.status(404).json({ message: 'Resume not found' });
-    }
-    res.download(freelancer.resume); 
+    };
+    res.download(freelancer.resume);
   } catch (error) {
     res.status(500).json({ message: 'Failed to download resume' });
   }

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Add new field skillsm experience and profilePicture
 const userSchema = new mongoose.Schema({
   fullName: {
     type: String,
@@ -15,8 +16,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   username: {
-    type: String, 
-    
+    type: String,
+
     unique: true,
   },
   role: {
@@ -25,17 +26,32 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   permissions: {
-    viewUsers: { type: Boolean, default: false }, 
+    viewUsers: { type: Boolean, default: false },
     deleteUsers: { type: Boolean, default: false },
     // Other permissions such as view jobs, create jobs, etc.
     viewJobs: { type: Boolean, default: true },
     createJobs: { type: Boolean, default: true },
     deleteJobs: { type: Boolean, default: true },
-   
+
   },
   verified: {
     type: Boolean,
-    default: false,  
+    default: false,
+  },
+  tradeSkills: {
+    type: String,
+    required: false,
+    default: null
+  },
+  experience: {
+    type: String,
+    required: false,
+    default: null
+  },
+  profilePicture: {
+    type: String,
+    required: false,
+    default: null
   },
   createdAt: {
     type: Date,

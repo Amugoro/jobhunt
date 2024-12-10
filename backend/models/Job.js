@@ -39,10 +39,11 @@ const jobSchema = new mongoose.Schema({
   },
   applicants: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   invitations: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  // made postedBy not required
   postedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User", 
-    required: true,
+    required: false,
   },
   createdAt: {
     type: Date,

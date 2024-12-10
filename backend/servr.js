@@ -52,7 +52,7 @@ app.use("/api/auth", authRoutes);
 app.use('/api/client', clientRoutes);
 app.use('/api/chat', chat);
 app.use('/api/user', userRoutes);
-app.use('/api/tradepersons', tradePersonRoutes);
+app.use('/api/tradepersons', tradePersonRoutes);  
 app.use(bodyParser.json());
 
 // Serve static files (uploaded files)
