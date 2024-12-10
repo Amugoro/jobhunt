@@ -45,7 +45,7 @@ exports.getProfile = async (req, res) => {
     const profile = await Freelancer.findOne({ user: req.user._id });
     if (!profile) return res.status(404).json({ message: 'Profile not found' });
 
-    res.json(profile);
+    res.json({ success: true, profile });
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }
