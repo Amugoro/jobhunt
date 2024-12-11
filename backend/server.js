@@ -36,7 +36,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://www.jwskilledhunt.org",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -46,7 +46,7 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "https://www.jwskilledhunt.org", credentials: true }));
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
 // File upload configuration
 const upload = multer({ dest: "uploads/" });

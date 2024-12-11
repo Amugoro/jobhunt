@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-
-const socket = io("http://localhost:5000");
+// Initialize socket
+const socket = io("http://localhost:5000"); 
 
 const Chat = ({ currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
@@ -11,9 +11,10 @@ const Chat = ({ currentUserId, receiverId }) => {
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [notification, setNotification] = useState("");
-  const [isChatOpen, setIsChatOpen] = useState(false); 
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
+    // Request chat history
     socket.emit("getChatHistory", { currentUserId, receiverId });
 
     socket.on("chatHistory", (history) => {
@@ -39,6 +40,11 @@ const Chat = ({ currentUserId, receiverId }) => {
         { message: <img src={fileUrl} alt="file" className="file-preview" /> },
       ]);
     });
+
+    // Request notification permission
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
 
     return () => {
       socket.off("chatHistory");
