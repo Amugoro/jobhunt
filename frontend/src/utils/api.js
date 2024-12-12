@@ -35,12 +35,177 @@ export const createOrUpdateFreelancerProfile = async (formData) => {
     const response = await axios.post(`${API_URL}/freelancer/profile`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
-        'content-type': 'application/x-www-form-urlencoded',
+        // 'content-type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${token}`,
       },
     });
     return response.data;
   } catch (error) {
     return { success: false, message: error.response.data.message || "Error creating profile" };
+  }
+}
+
+// added api to update trade person profile
+export const createOrUpdateTradePersonProfile = async (formData) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/tradepersons/profile`, formData, {
+      headers: {
+        // 'content-type': 'multipart/form-data',
+        // 'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error creating profile" };
+  }
+}
+
+// added api for clients to post jobs
+export const clientPostJob = async (formData) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/jobs/post`, formData, {
+      headers: {
+        // 'content-type': 'multipart/form-data',
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error posting job" };
+  }
+}
+
+// added api for client to get profiles
+export const getClientProfile = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/client/profiles`, {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting profile" };
+  }
+}
+
+// added api for client to send invation as a client
+export const clientSendInvitation = async (formData) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.post(`${API_URL}/client/send-invitation`, formData, {
+      headers: {
+        // 'content-type': 'multipart/form-data',
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting profile" };
+  }
+}
+
+// added api for client to get download resume
+export const downloadResume = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/client/download-resume/${id}`, {
+      headers: {
+        // 'content-type': 'multipart/form-data',
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+        responseType: 'blob',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting profile" };
+  }
+}
+
+// added api to get trade person profile
+export const getTradePersonProfile = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/tradepersons/profile`, {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting profile" };
+  }
+}
+
+// added api to get trade person profile
+export const getFreelancerProfile = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/freelancer/profile`, {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting profile" };
+  }
+}
+
+// added api to get trade person invitations
+export const fetchPersonInvitations = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/jobs/invitations`, {
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting invitations" };
+  }
+}
+
+// added api to get trade person invitations
+export const getUserData = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/user/data`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting user data" };
+  }
+}
+
+// added api to get all jobs
+export const fetchAllJobs = async (params) => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${API_URL}/jobs`, {
+      params,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return { success: false, message: error.response.data.message || "Error getting jobs" };
   }
 }

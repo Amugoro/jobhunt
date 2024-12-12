@@ -1,31 +1,36 @@
 
 const Freelancer = require('../models/Freelancer');
-const cloudinary = require('cloudinary').v2;
+// const cloudinary = require('cloudinary').v2;
 
 // Create or Update Freelancer Profile
 exports.createOrUpdateProfile = async (req, res) => {
-  console.log('ReqBody:', req.body);
-
   const { objective, skills, experience } = req.body;
   const userId = req.user.id;
 
   try {
+    console.log(req.files)
+
+    const profilePicture = req.files ? `/uploads/profiles/${req.files.profilePicture[0].filename}` : null;
+    const resume = req.files ? `/uploads/resumes/${req.files.resume[0].filename}` : null;
+
     const profileData = {
       user: userId,
       objective,
       skills: skills.split(',').map(skill => skill.trim()),
       experience: JSON.parse(experience),
+      profilePicture,
+      resume
     };
 
-    if (req.files?.profilePicture) {
-      const result = await cloudinary.uploader.upload(req.files.profilePicture.tempFilePath);
-      profileData.profilePicture = result.secure_url;
-    }
+    // if (req.files?.profilePicture) {
+    //   const result = await cloudinary.uploader.upload(req.files.profilePicture.tempFilePath);
+    //   profileData.profilePicture = result.secure_url;
+    // }
 
-    if (req.files?.resume) {
-      const result = await cloudinary.uploader.upload(req.files.resume.tempFilePath, { resource_type: 'raw' });
-      profileData.resume = result.secure_url;
-    }
+    // if (req.files?.resume) {
+    //   const result = await cloudinary.uploader.upload(req.files.resume.tempFilePath, { resource_type: 'raw' });
+    //   profileData.resume = result.secure_url;
+    // }
 
     let profile = await Freelancer.findOneAndUpdate({ user: userId }, profileData, {
       new: true,

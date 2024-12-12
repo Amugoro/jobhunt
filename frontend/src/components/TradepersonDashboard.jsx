@@ -7,11 +7,12 @@ import NotificationBell from "./NotificationBell";
 import JobInvitations from "./JobInvitations";
 import ManageApplications from "./ManageApplication";
 import DocumentVerification from "../verify/DocumentVerification";
-import VerifiedBadge  from "../verify/VerifiedBadge";
-import {UnverifiedBadge} from '../verify/UnverifiedBadge'
+import VerifiedBadge from "../verify/VerifiedBadge";
+import { UnverifiedBadge } from '../verify/UnverifiedBadge'
+import { getTradePersonProfile } from "../utils/api";
 
 
-const TradepersonDashboard = ({ tradepersonId, clientId}) => {
+const TradepersonDashboard = ({ tradepersonId, clientId }) => {
   const [profile, setProfile] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
@@ -19,22 +20,21 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login"; 
+      window.location.href = "/login";
     } else {
       fetchProfile(token);
     }
   }, []);
 
-  const fetchProfile = async (token) => {
+  const fetchProfile = async () => {
     try {
-      const response = await axios.get(`/api/profile/tradeperson/${tradepersonId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const { profile } = response.data;
-      setProfile(profile);
-      setIsVerified(profile?.isVerified || false); // Assume profile includes verification status
+      const { success, profile, message } = await getTradePersonProfile();
+      if (success) {
+        setProfile(profile);
+        setIsVerified(profile?.isVerified || false); // Assume profile includes verification status
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error("Error fetching profile", error);
     }
@@ -47,9 +47,9 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
     }
   };
 
-  
+
   const handleProfileUpdated = (updatedProfile) => {
-    setProfile(updatedProfile); 
+    setProfile(updatedProfile);
   };
 
   return (
@@ -64,33 +64,33 @@ const TradepersonDashboard = ({ tradepersonId, clientId}) => {
         <ManageApplications />
       </div>
 
-       {/* Verification Badge */}
-       <div className="mb-6">
-       {isVerified ? (
-         <VerifiedBadge />
-       ) : (
-         <>
-           <UnverifiedBadge />
-           <button
-             onClick={() => setShowVerificationForm(!showVerificationForm)}
-             className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-           >
-             {showVerificationForm ? "Cancel Verification" : "Verify Now"}
-           </button>
-         </>
-       )}
-     </div>
+      {/* Verification Badge */}
+      <div className="mb-6">
+        {isVerified ? (
+          <VerifiedBadge />
+        ) : (
+          <>
+            <UnverifiedBadge />
+            <button
+              onClick={() => setShowVerificationForm(!showVerificationForm)}
+              className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {showVerificationForm ? "Cancel Verification" : "Verify Now"}
+            </button>
+          </>
+        )}
+      </div>
 
-     {/* Document Verification Form */}
-     {showVerificationForm && (
-       <div className="mb-6">
-         <DocumentVerification
-         
-           userId={tradepersonId}
-           onVerificationComplete={handleVerificationComplete}
-         />
-       </div>
-     )}
+      {/* Document Verification Form */}
+      {showVerificationForm && (
+        <div className="mb-6">
+          <DocumentVerification
+
+            userId={tradepersonId}
+            onVerificationComplete={handleVerificationComplete}
+          />
+        </div>
+      )}
 
       {profile ? (
         <div>

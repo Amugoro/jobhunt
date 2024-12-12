@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import ProfileCard from './ProfileCard';
+import { getClientProfile } from '../utils/api';
 
 const ProfileList = () => {
   const [freelancers, setFreelancers] = useState([]);
@@ -15,14 +15,16 @@ const ProfileList = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('/api/client/profiles', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setFreelancers(response.data.freelancers);
-        setTradespersons(response.data.tradespersons);
-        setFilteredFreelancers(response.data.freelancers);
-        setFilteredTradespersons(response.data.tradespersons);
+        // restructed api call
+        const { success, freelancers, tradespersons, message } = await getClientProfile();
+        if (success) {
+          setFreelancers(freelancers);
+          setTradespersons(tradespersons);
+          setFilteredFreelancers(freelancers);
+          setFilteredTradespersons(tradespersons);
+        } else {
+          setError(message);
+        }
       } catch (err) {
         setError('Failed to load profiles');
         console.error(err);
@@ -61,7 +63,7 @@ const ProfileList = () => {
   return (
     <div>
       {error && <p className="text-red-500">{error}</p>}
-      
+
       {/* Freelancers Button */}
       <button
         onClick={() => openModal('freelancer')}
@@ -83,8 +85,8 @@ const ProfileList = () => {
         <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-lg max-w-md w-full relative">
             {/* Close button */}
-            <button 
-              onClick={closeModal} 
+            <button
+              onClick={closeModal}
               className="text-red-500 absolute top-2 right-2 text-xl"
             >
               &times;
@@ -99,7 +101,8 @@ const ProfileList = () => {
               onChange={(e) => handleSearch(e.target.value, selectedCategory)}
               className="border p-2 w-full mb-4"
             />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* temp resolved filter records not properly displayed */}
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
               {(selectedCategory === 'freelancer' ? filteredFreelancers : filteredTradespersons).map((profile) => (
                 <ProfileCard key={profile._id} profile={profile} userType={selectedCategory} />
               ))}
@@ -107,7 +110,7 @@ const ProfileList = () => {
           </div>
         </div>
       )}
-      
+
       {/* Freelancers Section */}
       {!isModalOpen && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

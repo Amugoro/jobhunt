@@ -4,25 +4,33 @@ import NotificationBell from "../components/NotificationBell";
 import ManageApplications from "../components/ManageApplication";
 import JobInvitations from "../components/JobInvitations";
 import DocumentVerification from "../verify/DocumentVerification";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import VerifiedBadge from "../verify/VerifiedBadge";
-import {UnverifiedBadge} from '../verify/UnverifiedBadge'
+import { UnverifiedBadge } from '../verify/UnverifiedBadge'
+import { getFreelancerProfile } from "../utils/api";
 
-const FreelancerDashboard = ({  freelancerId, clientId }) => {
+const FreelancerDashboard = ({ freelancerId, clientId }) => {
   const [isVerified, setIsVerified] = useState(false);
   const [showVerificationForm, setShowVerificationForm] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+    } else {
+      fetchFreelancerProfile();
+    }
+  }, []);
 
-  const fetchFreelancerProfile = async (token) => {
+
+  const fetchFreelancerProfile = async () => {
     try {
-      const response = await axios.get(`/api/profile/freelancer/${freelancerId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const { profile } = response.data;
-      setIsVerified(profile?.isVerified || false); 
+      const { success, profile, message } = await getFreelancerProfile();
+      if (success) {
+        setIsVerified(profile?.isVerified || false);
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error("Error fetching freelancer profile", error);
     }
@@ -43,34 +51,34 @@ const FreelancerDashboard = ({  freelancerId, clientId }) => {
         <hr className="my-6" />
         <JobInvitations />
         <hr className="my-6" />
-        <ManageApplications /> 
+        <ManageApplications />
       </div>
-       {/* Verification Badge */}
-       <div className="mb-6">
-       {isVerified ? (
-         <VerifiedBadge />
-       ) : (
-         <>
-           <UnverifiedBadge />
-           <button
-             onClick={() => setShowVerificationForm(!showVerificationForm)}
-             className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-           >
-             {showVerificationForm ? "Cancel Verification" : "Verify Now"}
-           </button>
-         </>
-       )}
-     </div>
+      {/* Verification Badge */}
+      <div className="mb-6">
+        {isVerified ? (
+          <VerifiedBadge />
+        ) : (
+          <>
+            <UnverifiedBadge />
+            <button
+              onClick={() => setShowVerificationForm(!showVerificationForm)}
+              className="ml-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              {showVerificationForm ? "Cancel Verification" : "Verify Now"}
+            </button>
+          </>
+        )}
+      </div>
 
-     {/* Document Verification Form */}
-     {showVerificationForm && (
-       <div className="mb-6">
-         <DocumentVerification
-           userId={freelancerId}
-           onVerificationComplete={handleVerificationComplete}
-         />
-       </div>
-     )}
+      {/* Document Verification Form */}
+      {showVerificationForm && (
+        <div className="mb-6">
+          <DocumentVerification
+            userId={freelancerId}
+            onVerificationComplete={handleVerificationComplete}
+          />
+        </div>
+      )}
 
 
       <FreelancerProfileForm />

@@ -1,16 +1,17 @@
-import  { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { fetchPersonInvitations } from '../utils/api';
 
 const JobInvitations = () => {
   const [invitations, setInvitations] = useState([]);
 
   useEffect(() => {
     const fetchInvitations = async () => {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('/api/jobs/invitations', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setInvitations(response.data);
+      const { success, jobs, message } = await fetchPersonInvitations();
+      if (success) {
+        setInvitations(jobs);
+      } else {
+        alert(message);
+      }
     };
     fetchInvitations();
   }, []);

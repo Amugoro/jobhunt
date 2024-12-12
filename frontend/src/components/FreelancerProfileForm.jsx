@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { createOrUpdateFreelancerProfile } from '../utils/api';
 
 const FreelancerProfileForm = () => {
@@ -63,6 +62,15 @@ const FreelancerProfileForm = () => {
     setPreview({ ...preview, experiences: updatedExperiences });
   };
 
+  const toBinary = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = () => resolve(new Uint8Array(reader.result));
+      reader.onerror = (error) => reject(error);
+    });
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -97,15 +105,7 @@ const FreelancerProfileForm = () => {
       //   },
       // });
 
-      const fd = {
-        objective: formData.objective,
-        skills: formData.skills,
-        experience: JSON.stringify(experiences)
-      };
-
-      const encodedData = new URLSearchParams(fd).toString();
-
-      const { success, profile, message } = await createOrUpdateFreelancerProfile(encodedData);
+      const { success, profile, message } = await createOrUpdateFreelancerProfile(form);
       if (success) {
         alert('Profile created/updated successfully!');
       } else {

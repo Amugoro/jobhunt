@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { clientSendInvitation } from '../utils/api';
 
 const SendInvitation = ({ recipientId, recipientType }) => {
   const [message, setMessage] = useState('');
 
   const handleSendInvitation = async () => {
-    const token = localStorage.getItem('token');
     try {
-      await axios.post(
-        '/api/client/send-invitation',
-        { recipientId, recipientType, message },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const fd = { recipientId, recipientType, message };
+
+      const encodedData = new URLSearchParams(fd).toString();
+
+      await clientSendInvitation(encodedData); 
+
       alert('Invitation sent successfully');
       setMessage('');
     } catch (error) {

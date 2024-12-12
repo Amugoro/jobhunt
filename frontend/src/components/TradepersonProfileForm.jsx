@@ -1,5 +1,5 @@
-import  { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import { createOrUpdateTradePersonProfile } from '../utils/api';
 
 const TradepersonProfileForm = ({ onProfileUpdated }) => {
   const [formData, setFormData] = useState({
@@ -33,19 +33,15 @@ const TradepersonProfileForm = ({ onProfileUpdated }) => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post(
-        '/api/profile/tradeperson',
-        formDataToSend,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        }
-      );
-      alert('Profile created successfully');
-      onProfileUpdated(response.data.profile);
+      // restuctured to make use of api and format data for url encoded parsing
+      const { success, profile, message } = await createOrUpdateTradePersonProfile(formDataToSend);
+
+      if (success) {
+        alert('Profile created successfully');
+        onProfileUpdated(profile);
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error('Error updating profile', error);
       alert('Failed to update profile');

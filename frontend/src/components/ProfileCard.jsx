@@ -1,16 +1,19 @@
 import SendInvitation from './SendInvitation';
 import RateUser from './RateUser';
-import axios from 'axios';
+import { downloadResume } from '../utils/api';
 
 const ProfileCard = ({ profile, userType }) => {
+  // restructure api call
   const handleDownloadResume = async () => {
-    const token = localStorage.getItem('token');
     try {
-      const response = await axios.get(`/api/client/download-resume/${profile._id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: 'blob',
-      });
-      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const { data, message } = await downloadResume(profile._id);
+
+      if (message) {
+        alert(message);
+        return;
+      }
+
+      const url = window.URL.createObjectURL(new Blob([data]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', 'resume.pdf');
@@ -22,13 +25,13 @@ const ProfileCard = ({ profile, userType }) => {
   };
 
   return (
-    <div className="p-4 bg-white shadow-lg rounded-lg">
+    <div className="p-4 bg-white shadow-lg rounded-lg mb-4">
       {/* Profile Picture */}
-      <img src={profile.profilePicture} alt="Profile" className="w-20 h-20 rounded-full mx-auto mb-4" />
-      
+      <img src={'http://localhost:5000' + profile.profilePicture} alt="Profile" className="w-20 h-20 rounded-full mx-auto mb-4" />
+
       {/* Full Name */}
       <h3 className="text-xl font-bold">{profile.fullName}</h3>
-      
+
       {/* Displaying skills */}
       <p className="text-gray-600 mb-4">{profile.skills.join(', ')}</p>
 

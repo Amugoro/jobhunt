@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { clientPostJob } from '../utils/api';
 
 const JobPostForm = ({ onJobPosted }) => {
   const [formData, setFormData] = useState({
@@ -16,28 +17,39 @@ const JobPostForm = ({ onJobPosted }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // restuctured to make use of api and format data for url encoded parsing
+  // the onJobPosted function isn't available here
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       // Make the POST request without sending the Authorization header
-      const response = await axios.post(
-        '/api/jobs/post',
-        { ...formData, skillsRequired: formData.skillsRequired.split(',') }
-      );
+      const fd = {
+        ...formData,
+        skillsRequired: formData.skillsRequired.split(',')
+      };
 
-      // Notify parent that a job has been posted
-      onJobPosted(response.data.job);
+      const encodedData = new URLSearchParams(fd).toString();
 
-      alert('Job posted successfully');
-      // Reset the form
-      setFormData({ 
-        title: '', 
-        description: '', 
-        category: 'Tech', 
-        subcategory: 'Onsite', 
-        skillsRequired: '', 
-        location: '' 
-      });
+      const { success, job, message } = await clientPostJob(encodedData);
+
+      if (success) {
+        // Notify parent that a job has been posted
+        // onJobPosted(job);
+
+        alert('Job posted successfully');
+
+        // Reset the form
+        setFormData({
+          title: '',
+          description: '',
+          category: 'Tech',
+          subcategory: 'Onsite',
+          skillsRequired: '',
+          location: ''
+        });
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error('Error posting job:', error.response || error.message);
       alert('Failed to post');

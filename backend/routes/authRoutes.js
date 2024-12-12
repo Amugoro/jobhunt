@@ -130,23 +130,23 @@ router.post("/login", async (req, res) => {
   }
 });
 
-app.post("/refresh-token", (req, res) => {
-  const { refreshToken } = req.body;
+// app.post("/refresh-token", (req, res) => {
+//   const { refreshToken } = req.body;
 
-  if (!refreshToken) return res.status(401).send("Unauthorized");
+//   if (!refreshToken) return res.status(401).send("Unauthorized");
 
-  jwt.verify(refreshToken, process.env.REFRESH_SECRET, (err, user) => {
-      if (err) return res.status(403).send("Forbidden");
+//   jwt.verify(refreshToken, process.env.REFRESH_SECRET, (err, user) => {
+//       if (err) return res.status(403).send("Forbidden");
 
-      const newAccessToken = jwt.sign(
-          { userId: user.id },
-          process.env.JWT_SECRET,
-          { expiresIn: "1h" }
-      );
+//       const newAccessToken = jwt.sign(
+//           { userId: user.id },
+//           process.env.JWT_SECRET,
+//           { expiresIn: "1h" }
+//       );
 
-      res.json({ accessToken: newAccessToken });
-  });
-});
+//       res.json({ accessToken: newAccessToken });
+//   });
+// });
 
 
 // Forgot Password route

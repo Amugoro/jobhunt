@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import JobPostForm from './JobPostForm';
 import JobSearchFilters from '../pages/home/JobSearchFilters';
+import { fetchAllJobs, getUserData } from '../utils/api';
 
 const JobSearch = () => {
   const [jobs, setJobs] = useState([]);
@@ -21,19 +22,21 @@ const JobSearch = () => {
       navigate('/login');
     } else {
       // Fetch user details
-      axios
-        .get('/api/user', { headers: { Authorization: `Bearer ${token}` } })
-        .then((response) => {
-          setSkills(response.data.skills);
-          setUserRole(response.data.role); 
-          fetchJobs();
-          fetchAppliedJobs();
-        })
-        .catch((error) => {
-          console.error('Error fetching user details:', error);
-        });
+      fetchUserDetails();
     }
   }, [navigate]);
+
+  const fetchUserDetails = async () => {
+    const { success, user, message } = await getUserData();
+    if (success) {
+      setSkills(user.tradeSkills);
+      setUserRole(user.role);
+      fetchJobs();
+      fetchAppliedJobs();
+    } else {
+      alert(message);
+    }
+  }
 
   const applyForJob = async (jobId) => {
     const token = localStorage.getItem('token');
@@ -65,16 +68,20 @@ const JobSearch = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/jobs', {
-        params: { category, location, search: searchQuery },
-      });
+      const params = { category, location, search: searchQuery };
+      const { success, jobs, message } = await fetchAllJobs(params);
 
-      // Filter jobs based on user's skills
-      const filteredJobs = response.data.filter((job) =>
-        job.skillsRequired.some((skill) => skills.includes(skill))
-      );
+      if (success) {
+        // Filter jobs based on user's skills
+        const filteredJobs = jobs.filter((job) =>
+          job.skillsRequired.some((skill) => skills.includes(skill))
+        );
 
-      setJobs(filteredJobs);
+        // setJobs(filteredJobs);
+        setJobs(jobs);
+      } else {
+        alert(message);
+      }
     } catch (error) {
       console.error('Error fetching jobs:', error);
     } finally {

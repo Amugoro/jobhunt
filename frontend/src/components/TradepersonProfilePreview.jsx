@@ -7,7 +7,7 @@ const TradepersonProfilePreview = ({ profile }) => {
 
       {profile.profilePicture && (
         <img
-          src={profile.profilePicture}
+          src={'http://localhost:5000' + profile.profilePicture}
           alt="Profile"
           className="profile-picture w-32 h-32 rounded-full mb-4"
         />

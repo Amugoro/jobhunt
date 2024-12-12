@@ -17,8 +17,9 @@ router.get('/', async (req, res) => {
     if (category) filter.category = category;
     if (location) filter.location = location;
 
+    // const jobs = await Job.find();
     const jobs = await Job.find(filter);
-    res.status(200).json(jobs);
+    res.status(200).json({ success: true, jobs });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error fetching jobs' });
@@ -29,24 +30,24 @@ router.get('/', async (req, res) => {
 
 // Apply for a Job
 router.post('/apply/:jobId', protect, async (req, res) => {
-    try {
-      const job = await Job.findById(req.params.jobId);
-      if (!job) return res.status(404).json({ message: 'Job not found' });
-  
-      // Add applicant to the job
-      if (!job.applicants.includes(req.user.id)) {
-        job.applicants.push(req.user.id);
-        await job.save();
-        return res.status(200).json({ message: 'Applied successfully' });
-      }
-      res.status(400).json({ message: 'Already applied' });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Failed to apply for job' });
-    }
-  });
+  try {
+    const job = await Job.findById(req.params.jobId);
+    if (!job) return res.status(404).json({ message: 'Job not found' });
 
-  
+    // Add applicant to the job
+    if (!job.applicants.includes(req.user.id)) {
+      job.applicants.push(req.user.id);
+      await job.save();
+      return res.status(200).json({ message: 'Applied successfully' });
+    }
+    res.status(400).json({ message: 'Already applied' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to apply for job' });
+  }
+});
+
+
 // Route to fetch applied jobs for a user
 router.get('/applied', protect, async (req, res) => {
   try {
@@ -65,7 +66,7 @@ router.get('/applied', protect, async (req, res) => {
 router.get('/my-applications', protect, async (req, res) => {
   try {
     const applications = await Application.find({ user: req.user.id }).populate('job', 'title description');
-    
+
     // Return the applications with job details
     res.status(200).json(applications);
   } catch (error) {
@@ -73,16 +74,19 @@ router.get('/my-applications', protect, async (req, res) => {
     res.status(500).json({ message: 'Error fetching applications' });
   }
 });
-  
-  // Get Job Invitations
-  router.get('/invitations', protect, async (req, res) => {
-    try {
-      const jobs = await Job.find({ invitations: req.user.id });
-      res.status(200).json(jobs);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Failed to fetch invitations' });
-    }
-  });
+
+// Get Job Invitations
+router.get('/invitations', protect, async (req, res) => {
+  try {
+    console.log('userid:', req.user.id);
+    const jobs = await Job.find({ invitations: req.user.id });
+    // const jobs = await Job.find({});
+
+    res.status(200).json({ success: true, jobs });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch invitations' });
+  }
+});
 
 module.exports = router;
