@@ -10,6 +10,14 @@ const freelancerSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  username: {
+    type: [String], 
+    required: true,
+  },
+  Role: {
+    type: [String], 
+    required: true,
+  },
   objective: {
     type: String,
     trim: true,

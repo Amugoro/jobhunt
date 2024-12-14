@@ -21,7 +21,7 @@ const upload = multer({ storage });
 // corrected the route and added success checker
 router.post('/profile', protect, upload.single('profilePicture'), async (req, res) => {
   try {
-    const { tradeSkills, experience } = req.body;
+    const { tradeUsername, tradeRole, tradeSkills, experience } = req.body;
     const userId = req.user.id;
 
     const profilePicture = req.file ? `/uploads/profiles/${req.file.filename}` : null;
@@ -30,6 +30,8 @@ router.post('/profile', protect, upload.single('profilePicture'), async (req, re
       { _id: userId },
       {
         user: userId,
+        tradeUsername,
+        tradeRole,
         tradeSkills,
         experience,
         profilePicture

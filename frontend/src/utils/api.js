@@ -1,6 +1,8 @@
 import axios from 'axios';
 
+
 const API_URL = 'http://localhost:5000/api';
+
 
 export const signup = async (formData) => {
   try {
@@ -11,12 +13,53 @@ export const signup = async (formData) => {
   }
 };
 
+
 export const login = async (formData) => {
   try {
     const response = await axios.post(`${API_URL}/auth/login`, formData);
+    if (response.data.success) {
+      // Store both tokens
+      localStorage.setItem("accessToken", response.data.token);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      console.log("Token received by verify function:", response.data.refreshToken);
+    }
     return response.data;
   } catch (error) {
-    return { success: false, message: error.response.data.message || 'Login failed' };
+    return { success: false, message: error.response.data.message || "Login failed" };
+  }
+};
+
+
+
+// API to refresh token
+export const refreshAccessToken = async () => {
+  const refreshToken = localStorage.getItem('refreshToken');
+  
+  if (!refreshToken) {
+    return null;
+  }
+
+  try {
+    const response = await axios.post('/api/auth/refresh-token', {
+      refreshToken: refreshToken
+    });
+
+    if (response.data.success) {
+      const newAccessToken = response.data.accessToken;
+      localStorage.setItem('accessToken', newAccessToken);
+      return newAccessToken;
+    } else {
+      console.error('Failed to refresh token: ', response.data);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error refreshing access token:', error);
+    if (error.response) {
+      // If it's a server error, log it
+      console.error('Server error:', error.response.data);
+    }
+ 
+    return null;
   }
 };
 
@@ -98,7 +141,7 @@ export const getClientProfile = async () => {
 // added api for client to send invation as a client
 export const clientSendInvitation = async (formData) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.post(`${API_URL}/client/send-invitation`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -165,7 +208,7 @@ export const getFreelancerProfile = async () => {
 // added api to get trade person invitations
 export const fetchPersonInvitations = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/jobs/invitations`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
@@ -209,3 +252,26 @@ export const fetchAllJobs = async (params) => {
     return { success: false, message: error.response.data.message || "Error getting jobs" };
   }
 }
+// to fetch applied job
+export const fetchApplications = async () => {
+  const token = localStorage.getItem('accessToken');
+  if (!token) {
+    console.error('No token found, user is not authenticated');
+    return { success: false, jobs: [], message: 'No token found' };
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/jobs/applied`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching applications:', error);
+    if (error.response) {
+      return { success: false, jobs: [], message: error.response.data.message || 'Failed to fetch applications' };
+    } else {
+      return { success: false, jobs: [], message: 'Unknown error' };
+    }
+  }
+};

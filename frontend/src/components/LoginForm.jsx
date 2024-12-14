@@ -1,21 +1,23 @@
-import { useContext, useState } from "react";
-import { login, forgotPassword } from "../utils/api"; // Import the forgotPassword API
+import { useContext, useState, useEffect } from "react";
+import { login, forgotPassword } from "../utils/api";
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginForm() {
   const { loggedIn } = useContext(AuthContext);
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+      navigate("/dashboard"); // Or default dashboard route
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,22 +31,23 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { success, user, message, token } = await login(formData);
-    if (success) {
-      loggedIn(user);
-      localStorage.setItem('token', token);
+    try {
+      const { success, user, message, token, refreshToken } = await login(formData);
+      if (success) {
+        loggedIn(user);
+        localStorage.setItem("accessToken", token);
+        localStorage.setItem("refreshToken", refreshToken);
 
-      alert(`Welcome back ${user.fullName}`);
-      // Redirect based on role
-      if (user.role === "client") {
-        navigate("/client-dashboard");
-      } else if (user.role === "freelancer") {
-        navigate("/freelancer-dashboard");
-      } else if (user.role === "tradeperson") {
-        navigate("/tradeperson-dashboard");
+        alert(`Welcome back ${user.fullName}`);
+        if (user.role === "client") navigate("/client-dashboard");
+        else if (user.role === "freelancer") navigate("/freelancer-dashboard");
+        else if (user.role === "tradeperson") navigate("/tradeperson-dashboard");
+      } else {
+        setErrorMessage(message);
       }
-    } else {
-      setErrorMessage(message);
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrorMessage('An error occurred. Please try again later.');
     }
   };
 
@@ -54,12 +57,17 @@ function LoginForm() {
       return;
     }
 
-    const { success, message } = await forgotPassword({ email: forgotEmail });
-    if (success) {
-      alert("Password reset link has been sent to your email");
-      setShowForgotPassword(false);
-    } else {
-      alert(message);
+    try {
+      const { success, message } = await forgotPassword({ email: forgotEmail });
+      if (success) {
+        alert("Password reset link has been sent to your email");
+        setShowForgotPassword(false);
+      } else {
+        alert(message);
+      }
+    } catch (error) {
+      console.error('Forgot Password error:', error);
+      alert("An error occurred while sending the reset link. Please try again later.");
     }
   };
 
@@ -101,15 +109,15 @@ function LoginForm() {
               <span
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                role="button"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
           </div>
 
-          {errorMessage && (
-            <p className="text-sm text-red-600">{errorMessage}</p>
-          )}
+          {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
 
           <button
             type="submit"
@@ -153,7 +161,7 @@ function LoginForm() {
               </button>
               <button
                 onClick={() => setShowForgotPassword(false)}
-                className="w-full mt-2 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+                className="w-full mt-2 py-2 text-gray-600 hover:bg-gray-200"
               >
                 Cancel
               </button>

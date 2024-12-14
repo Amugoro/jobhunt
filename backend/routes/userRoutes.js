@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/data', protect, async (req, res) => {
   try {
-    console.log('hwew we go');
+    console.log('here we go');
     const user = await User.findById(req.user.id);
 
     if (!user) {

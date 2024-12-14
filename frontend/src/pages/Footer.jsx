@@ -55,13 +55,13 @@ export default function Footer() {
             <div className="flex items-center gap-3 *:size-12 *:bg-secondary-100 *:rounded-md">
               <a
                 href="https://www.facebook.com/profile.php?id=61553683591870&mibextid=ZbWKwL"
-                className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
+                className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:bg-purple-500"
               >
                 <FaFacebookF className="text-xl" />
               </a>
               <a
                 href="https://www.linkedin.com/company/jw-skilledhunt/"
-                className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:text-secondary-100"
+                className="hover:bg-primary transition duration-300 ease-out flex justify-center items-center text-white hover:bg-purple-500"
               >
                 <FaLinkedinIn className="text-xl" />
               </a>

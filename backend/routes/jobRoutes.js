@@ -4,7 +4,10 @@ const { createJob, getClientJobs } = require('../controllers/jobController');
 const Application = require('../models/Application');
 const { protect } = require('../middleware/authMiddleware');
 const Job = require('../models/Job');
+const Freelancer = require('../models/Freelancer');
+const Tradesperson = require('../models/Tradesperson');
 const router = express.Router();
+const Invitation = require('../models/Invitation');
 
 router.post('/post', protect, createJob);
 router.get('/client-jobs', protect, getClientJobs);
@@ -29,44 +32,54 @@ router.get('/', async (req, res) => {
 
 
 // Apply for a Job
-router.post('/apply/:jobId', protect, async (req, res) => {
-  try {
-    const job = await Job.findById(req.params.jobId);
-    if (!job) return res.status(404).json({ message: 'Job not found' });
+router.post('/jobs/apply/:jobId', protect, async (req, res) => {
+  const { jobId } = req.params;
+  const { proposal, amount, pastWorkLink } = req.body;
 
-    // Add applicant to the job
-    if (!job.applicants.includes(req.user.id)) {
-      job.applicants.push(req.user.id);
-      await job.save();
-      return res.status(200).json({ message: 'Applied successfully' });
-    }
-    res.status(400).json({ message: 'Already applied' });
+  try {
+    const application = new Application({
+      jobId,
+      userId: req.user._id,
+      proposal,
+      amount,
+      pastWorkLink,
+    });
+
+    await application.save();
+    res.status(200).json({ success: true, message: 'Application submitted successfully.' });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to apply for job' });
+    res.status(500).json({ success: false, message: 'Error applying for job' });
   }
 });
+
 
 
 // Route to fetch applied jobs for a user
 router.get('/applied', protect, async (req, res) => {
-  try {
-    const userId = req.user.id;
-    const applications = await Application.find({ user: userId }).populate('job', 'title description');
+  console.log('User ID:', req.user.id);  // Log the user ID to ensure it’s populated
 
-    res.status(200).json(applications);
+  try {
+    const applications = await Application.find({ userId: req.user.id });
+
+    res.json({
+      success: true,
+      jobs: applications,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error fetching applied jobs' });
+    console.error('Error fetching applications:', error);
+    res.status(500).json({
+      message: 'Failed to fetch applications',
+    });
   }
 });
+
 
 
 // Route to get all applications for the logged-in user
 router.get('/my-applications', protect, async (req, res) => {
   try {
-    const applications = await Application.find({ user: req.user.id }).populate('job', 'title description');
-
+    const applications = await Application.find({ userId: req.user.id }).populate('job', 'title description');
+    
     // Return the applications with job details
     res.status(200).json(applications);
   } catch (error) {
@@ -86,6 +99,31 @@ router.get('/invitations', protect, async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Failed to fetch invitations' });
+  }
+});
+
+router.get('/get-invitations', protect, async (req, res) => {
+  try {
+    // Fetch invitations for the authenticated user
+    const invitations = await Invitation.find({ clientId: req.user.id });
+
+    if (!invitations || invitations.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No invitations found',
+      });
+    }
+
+    res.json({
+      success: true,
+      jobs: invitations, 
+    });
+  } catch (error) {
+    console.error('Error fetching invitations:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to fetch invitations',
+    });
   }
 });
 

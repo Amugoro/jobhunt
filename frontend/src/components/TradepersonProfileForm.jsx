@@ -3,7 +3,9 @@ import { createOrUpdateTradePersonProfile } from '../utils/api';
 
 const TradepersonProfileForm = ({ onProfileUpdated }) => {
   const [formData, setFormData] = useState({
+    tradeUsername: '',
     tradeSkills: '',
+    tradeRole: '',
     experience: '',
     profilePicture: null,
   });
@@ -25,61 +27,90 @@ const TradepersonProfileForm = ({ onProfileUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate form fields
+    if (!formData.tradeUsername || !formData.tradeSkills || !formData.tradeRole || !formData.experience) {
+      alert('All fields are required!');
+      return;
+    }
+
+    // Prepare FormData for API
     const formDataToSend = new FormData();
-    formDataToSend.append('tradeSkills', formData.tradeSkills);
-    formDataToSend.append('experience', formData.experience);
-    if (formData.profilePicture) {
-      formDataToSend.append('profilePicture', formData.profilePicture);
+    for (const key in formData) {
+      if (formData[key]) {
+        formDataToSend.append(key, formData[key]);
+      }
     }
 
     try {
-      // restuctured to make use of api and format data for url encoded parsing
-      const { success, profile, message } = await createOrUpdateTradePersonProfile(formDataToSend);
+      const response = await createOrUpdateTradePersonProfile(formDataToSend);
 
-      if (success) {
+      if (response.success) {
         alert('Profile created successfully');
-        onProfileUpdated(profile);
+        onProfileUpdated(response.profile); // Pass updated profile to parent
       } else {
-        alert(message);
+        alert(response.message || 'Failed to create profile');
       }
     } catch (error) {
-      console.error('Error updating profile', error);
+      console.error('Error updating profile:', error);
       alert('Failed to update profile');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-6 bg-white shadow rounded-lg">
-      <h2 className="text-xl font-semibold mb-4">Create Your Profile</h2>
+    <form onSubmit={handleSubmit} className="p-6 bg-white shadow-md rounded-lg max-w-md mx-auto">
+      <h2 className="text-xl font-semibold mb-4 text-gray-700">Create Your Profile</h2>
+
+      <input
+        type="text"
+        name="tradeUsername"
+        placeholder="Username"
+        className="block w-full p-2 border border-gray-300 rounded mb-4"
+        value={formData.tradeUsername}
+        onChange={handleChange}
+        required
+      />
 
       <input
         type="text"
         name="tradeSkills"
-        placeholder="Trade Skills (comma separated)"
-        className="block w-full p-2 border mb-4"
+        placeholder="Trade Skills (comma-separated)"
+        className="block w-full p-2 border border-gray-300 rounded mb-4"
         value={formData.tradeSkills}
         onChange={handleChange}
+        required
+      />
+
+      <input
+        type="text"
+        name="tradeRole"
+        placeholder="Role (e.g., tiler, painter)"
+        className="block w-full p-2 border border-gray-300 rounded mb-4"
+        value={formData.tradeRole}
+        onChange={handleChange}
+        required
       />
 
       <textarea
         name="experience"
         placeholder="Experience"
-        className="block w-full p-2 border mb-4"
+        className="block w-full p-2 border border-gray-300 rounded mb-4"
         value={formData.experience}
         onChange={handleChange}
+        required
       ></textarea>
 
+      <label className="block text-gray-600 mb-2">Upload Profile Picture</label>
       <input
         type="file"
         name="profilePicture"
         accept="image/*"
-        className="block w-full p-2 border mb-4"
+        className="block w-full p-2 border border-gray-300 rounded mb-4"
         onChange={handleChange}
       />
 
       <button
         type="submit"
-        className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+        className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
       >
         Save Profile
       </button>

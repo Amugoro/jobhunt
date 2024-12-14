@@ -1,4 +1,4 @@
-import { useCallback, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import JobPostForm from './JobPostForm';
@@ -13,7 +13,10 @@ const JobSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState(null); // Track user role
+  const [selectedJob, setSelectedJob] = useState(null); // Selected job for application
+  const [proposal, setProposal] = useState(''); // Proposal content
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,7 +26,6 @@ const JobSearch = () => {
     } else {
       fetchUserDetails();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
   const fetchUserDetails = async () => {
@@ -35,6 +37,23 @@ const JobSearch = () => {
       fetchAppliedJobs();
     } else {
       alert(message);
+    }
+  };
+
+  const applyForJob = async (jobId, proposalContent) => {
+    const token = localStorage.getItem('token');
+    try {
+      await axios.post(
+        `/api/jobs/apply/${jobId}`,
+        { proposal: proposalContent },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert('Applied successfully!');
+      fetchAppliedJobs();
+      setIsModalOpen(false); // Close modal after applying
+      setProposal(''); // Reset proposal content
+    } catch (error) {
+      console.error('Error applying for job:', error);
     }
   };
 
@@ -50,35 +69,33 @@ const JobSearch = () => {
     }
   };
 
-  const fetchJobs = useCallback(
-    async (role) => {
-      setLoading(true);
-      try {
-        const params = { category, location, search: searchQuery };
-        const { success, jobs, message } = await fetchAllJobs(params);
+  const fetchJobs = async (role) => {
+    setLoading(true);
+    try {
+      const params = { category, location, search: searchQuery };
+      const { success, jobs, message } = await fetchAllJobs(params);
 
-        if (success) {
-          const filteredJobs = jobs.filter((job) => {
-            if (role === 'freelancer') {
-              return job.category === 'Tech';
-            } else if (role === 'tradeperson') {
-              return job.category === 'Trade';
-            }
-            return true;
-          });
+      if (success) {
+        // Role-specific filtering
+        const filteredJobs = jobs.filter((job) => {
+          if (role === 'freelancer') {
+            return job.category === 'Tech'; // Freelancers see Tech jobs only
+          } else if (role === 'tradeperson') {
+            return job.category === 'Trade'; // Tradespeople see Trade jobs only
+          }
+          return true;
+        });
 
-          setJobs(filteredJobs);
-        } else {
-          alert(message);
-        }
-      } catch (error) {
-        console.error('Error fetching jobs:', error);
-      } finally {
-        setLoading(false);
+        setJobs(filteredJobs);
+      } else {
+        alert(message);
       }
-    },
-    [category, location, searchQuery] // Dependencies that fetchJobs relies on
-  );
+    } catch (error) {
+      console.error('Error fetching jobs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleJobPosted = (newJob) => {
     setJobs((prevJobs) => [newJob, ...prevJobs]);
@@ -88,7 +105,7 @@ const JobSearch = () => {
     if (userRole) {
       fetchJobs(userRole);
     }
-  }, [category, fetchJobs, location, skills, userRole]);
+  }, [category, location, skills, userRole]);
 
   // Filter jobs based on search query
   const filteredJobs = jobs.filter((job) =>
@@ -96,6 +113,18 @@ const JobSearch = () => {
     job.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
     job.company.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Handle job application modal open
+  const openApplyModal = (job) => {
+    setSelectedJob(job);
+    setIsModalOpen(true);
+  };
+
+  // Handle closing modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setProposal('');
+  };
 
   return (
     <div className="job-search-page">
@@ -150,11 +179,11 @@ const JobSearch = () => {
                 </p>
                 {appliedJobs.includes(job._id) ? (
                   <button className="bg-gray-400 text-white p-2 rounded mt-2" disabled>
-                    Applied
+                    Already Applied
                   </button>
                 ) : (
                   <button
-                    onClick={() => navigate(`/apply/${job._id}`)}
+                    onClick={() => openApplyModal(job)}
                     className="bg-blue-500 text-white p-2 rounded mt-2"
                   >
                     Apply
@@ -163,6 +192,37 @@ const JobSearch = () => {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* Apply Job Modal */}
+      {isModalOpen && selectedJob && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-75 z-50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h3 className="font-semibold text-xl">{selectedJob.title}</h3>
+            <p>{selectedJob.company}</p>
+            <p>{selectedJob.description}</p>
+            <textarea
+              className="w-full p-2 border mt-4"
+              placeholder="Write your proposal here..."
+              value={proposal}
+              onChange={(e) => setProposal(e.target.value)}
+            />
+            <div className="mt-4">
+              <button
+                onClick={() => applyForJob(selectedJob._id, proposal)}
+                className="bg-blue-500 text-white p-2 rounded mr-2"
+              >
+                Submit Proposal
+              </button>
+              <button
+                onClick={closeModal}
+                className="bg-gray-400 text-white p-2 rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

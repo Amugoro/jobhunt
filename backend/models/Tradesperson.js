@@ -10,6 +10,14 @@ const TradespersonSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
+  tradeUsrename: {
+    type: [String],
+    required: true,
+  },
+  tradeRole: {
+    type: [String],
+    required: true,
+  },
   objective: {
     type: String,
     trim: true,

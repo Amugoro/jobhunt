@@ -5,13 +5,19 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const sendEmail = require("../utils/emailService");
 const { protect } = require("../middleware/authMiddleware");
-const { JWT_SECRET } = require('../keys');
+require('dotenv').config();
 
 
 
 // Default JWT secret if not provided in .env
+const JWT_SECRET = process.env.JWT_SECRET || "default_jwt_secret";
+const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || "default_refresh_secret";
 
-console.log(JWT_SECRET)
+
+
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+console.log("REFRESH_TOKEN_SECRET:", process.env.REFRESH_TOKEN_SECRET);
+
 
 // Signup Route
 router.post("/signup", async (req, res) => {
@@ -97,6 +103,17 @@ router.post("/signup", async (req, res) => {
 //   });
 
 // Login Route
+// Generate Access Token
+const generateAccessToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
+};
+
+// Generate Refresh Token
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+};
+
+// Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -119,34 +136,58 @@ router.post("/login", async (req, res) => {
         .json({ success: false, message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    // Generate Tokens
+    const accessToken = generateAccessToken(user._id);
+    //console.log("accesstoken:", accessToken);
+    const refreshToken = generateRefreshToken(user._id);
+   // console.log("generateaccesstoken:", refreshToken);
+
+    // Save refresh token to database (optional for security)
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    // Send refresh token as an HTTP-only cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // Secure in production
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
-    res.json({ success: true, user, token });
+    // Respond with access token and user info
+    res.json({ success: true, user, accessToken });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// app.post("/refresh-token", (req, res) => {
-//   const { refreshToken } = req.body;
+router.post("/refresh-token", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
 
-//   if (!refreshToken) return res.status(401).send("Unauthorized");
+  if (!refreshToken) {
+    return res.status(403).json({ success: false, message: "Refresh token missing" });
+  }
 
-//   jwt.verify(refreshToken, process.env.REFRESH_SECRET, (err, user) => {
-//       if (err) return res.status(403).send("Forbidden");
+  try {
+    // Verify refresh token
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 
-//       const newAccessToken = jwt.sign(
-//           { userId: user.id },
-//           process.env.JWT_SECRET,
-//           { expiresIn: "1h" }
-//       );
+    // Find user and validate refresh token
+    const user = await User.findById(decoded.id);
+    if (!user || user.refreshToken !== refreshToken) {
+      return res.status(403).json({ success: false, message: "Invalid refresh token" });
+    }
 
-//       res.json({ accessToken: newAccessToken });
-//   });
-// });
+    // Generate a new access token
+    const accessToken = generateAccessToken(user._id);
+    res.json({ success: true, accessToken });
+  } catch (error) {
+    console.error("Error during token refresh:", error);
+    res.status(403).json({ success: false, message: "Invalid refresh token" });
+  }
+});
+
 
 
 // Forgot Password route

@@ -26,6 +26,7 @@ import "./app.css";
 import AdminDashboard from "./admin/AdminDashboard";
 import AdminLogin from "./admin/AdminLogin";
 import SubadminDashboard from "./admin/SubadminDashboard";
+import JobApplication from "./components/JobApplication";
 
 // Protected Route component
 function ProtectedRoute({ element: Component, ...rest }) {
@@ -57,6 +58,7 @@ function App() {
         <Navbar />
         <div className="page-content">
         <Routes>
+        
          <Route path="/admin-dashboard" element={<AdminDashboard />} />
          <Route path="/Subadmin-Dashboard" element={<SubadminDashboard/>} />
          <Route path="/admin-login" element={<AdminLogin />} />
@@ -74,6 +76,7 @@ function App() {
               path="/tradeperson-dashboard"
               element={<TradepersonDashboard />}
             />
+            <Route path="/apply/:jobId" element={<JobApplication />} />
             <Route path="/services" element={<Services />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/job-search" element={<JobSearch />} />
