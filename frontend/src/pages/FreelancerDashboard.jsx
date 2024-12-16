@@ -15,7 +15,7 @@ const FreelancerDashboard = ({ freelancerId, clientId }) => {
   const [activeSection, setActiveSection] = useState("Profile");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
     if (!token) {
       window.location.href = "/login";
     } else {

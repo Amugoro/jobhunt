@@ -74,7 +74,7 @@ export const forgotPassword = async (formData) => {
 
 export const createOrUpdateFreelancerProfile = async (formData) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.post(`${API_URL}/freelancer/profile`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -91,7 +91,7 @@ export const createOrUpdateFreelancerProfile = async (formData) => {
 // added api to update trade person profile
 export const createOrUpdateTradePersonProfile = async (formData) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.post(`${API_URL}/tradepersons/profile`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -108,7 +108,7 @@ export const createOrUpdateTradePersonProfile = async (formData) => {
 // added api for clients to post jobs
 export const clientPostJob = async (formData) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.post(`${API_URL}/jobs/post`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -125,7 +125,7 @@ export const clientPostJob = async (formData) => {
 // added api for client to get profiles
 export const getClientProfile = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/client/profiles`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
@@ -158,7 +158,7 @@ export const clientSendInvitation = async (formData) => {
 // added api for client to get download resume
 export const downloadResume = async (id) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/client/download-resume/${id}`, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -176,7 +176,7 @@ export const downloadResume = async (id) => {
 // added api to get trade person profile
 export const getTradePersonProfile = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/tradepersons/profile`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
@@ -192,7 +192,7 @@ export const getTradePersonProfile = async () => {
 // added api to get trade person profile
 export const getFreelancerProfile = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/freelancer/profile`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
@@ -224,7 +224,7 @@ export const fetchPersonInvitations = async () => {
 // added api to get trade person invitations
 export const getUserData = async () => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/user/data`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -239,7 +239,7 @@ export const getUserData = async () => {
 // added api to get all jobs
 export const fetchAllJobs = async (params) => {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.get(`${API_URL}/jobs`, {
       params,
       headers: {
