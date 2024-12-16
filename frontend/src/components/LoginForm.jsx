@@ -14,7 +14,7 @@ function LoginForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
+    if (localStorage.getItem("Token")) {
       navigate("/dashboard"); // Or default dashboard route
     }
   }, []);
@@ -35,7 +35,7 @@ function LoginForm() {
       const { success, user, message, token, refreshToken } = await login(formData);
       if (success) {
         loggedIn(user);
-        localStorage.setItem("accessToken", token);
+        localStorage.setItem("Token", token);
         localStorage.setItem("refreshToken", refreshToken);
 
         alert(`Welcome back ${user.fullName}`);

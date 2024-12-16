@@ -1,42 +1,50 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-require('dotenv').config()
-const { JWT_SECRET } = require('../keys');
+
+
 
 
 exports.protect = async (req, res, next) => {
-  // const { token } = req.body;
-  const token = req.headers.authorization?.split(' ')[1]; // Expecting "Bearer <token>"
-
-  console.log('Received Token:', token);
-
-  if (!token) {
-    return res.status(401).json({ message: 'Not authorized, no token' });
-  }
-
   try {
-    // Verify the token
-    const decoded = jwt.verify(token, JWT_SECRET);
-    console.log('Decoded JWT:', decoded);
+    // Check for the Authorization header
+    const authHeader = req.headers.authorization;
+    console.log('Authorization Header:', authHeader);
 
-    // Find the user by ID and validate the signup token
-    const user = await User.findById(decoded.id);
-    console.log(user)
-    if (!user) {
-      return res.status(401).json({ message: 'Not authorized, invalid token' });
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ message: 'Not authorized, malformed or missing token' });
     }
 
-    // Attach the user to the request
-    req.user = user;
+    // Extract the token
+    const token = authHeader.split(' ')[1];
+    console.log('Received Token:', token);
 
-    console.log(req.user)
+    if (!token) {
+      return res.status(401).json({ message: 'Not authorized, no token' });
+    }
+
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded JWT:', decoded);
+
+    // Find the user by ID
+    const user = await User.findById(decoded.id);
+    console.log('Found User:', user);
+
+    if (!user) {
+      return res.status(401).json({ message: 'Not authorized, user not found' });
+    }
+
+    // Attach the user to the request object
+    req.user = user;
+    console.log('Attached User to Request:', req.user);
 
     next();
   } catch (error) {
-    console.error('Error during token verification:', error);
+    console.error('Error during token verification:', error.message);
     res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
+
 
 // Middleware to verify if the user is an admin
 exports.isAdmin = (req, res, next) => {
