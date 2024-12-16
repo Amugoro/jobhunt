@@ -32,11 +32,11 @@ function LoginForm() {
     e.preventDefault();
 
     try {
-      const { success, user, message, token, refreshToken } = await login(formData);
+      const { success, user, message, accessToken } = await login(formData);
       if (success) {
         loggedIn(user);
-        localStorage.setItem("Token", token);
-        localStorage.setItem("refreshToken", refreshToken);
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", user.refreshToken);
 
         alert(`Welcome back ${user.fullName}`);
         if (user.role === "client") navigate("/client-dashboard");

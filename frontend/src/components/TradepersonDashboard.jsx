@@ -39,7 +39,7 @@ const TradepersonDashboard = ({ tradepersonId, clientId }) => {
   const [showVerificationForm, setShowVerificationForm] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("Token");
     if (!token) {
       window.location.href = "/login";
     } else {

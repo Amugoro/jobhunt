@@ -1,42 +1,32 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+require('dotenv').config()
+// const { JWT_SECRET } = require('../keys');
 
+const JWT_SECRET = process.env.JWT_SECRET;
 
 
 
 exports.protect = async (req, res, next) => {
+  // const { token } = req.body;
+  const token = req.headers.authorization?.split(' ')[1]; // Expecting "Bearer <token>"
+
+  if (!token) {
+    return res.status(401).json({ message: 'Not authorized, no token' });
+  }
+
   try {
-    // Check for the Authorization header
-    const authHeader = req.headers.authorization;
-    console.log('Authorization Header:', authHeader);
-
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({ message: 'Not authorized, malformed or missing token' });
-    }
-
-    // Extract the token
-    const token = authHeader.split(' ')[1];
-    console.log('Received Token:', token);
-
-    if (!token) {
-      return res.status(401).json({ message: 'Not authorized, no token' });
-    }
-
     // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decoded JWT:', decoded);
+    const decoded = jwt.verify(token, JWT_SECRET);
 
-    // Find the user by ID
+    // Find the user by ID and validate the signup token
     const user = await User.findById(decoded.id);
-    console.log('Found User:', user);
-
     if (!user) {
-      return res.status(401).json({ message: 'Not authorized, user not found' });
+      return res.status(401).json({ message: 'Not authorized, invalid token' });
     }
 
-    // Attach the user to the request object
+    // Attach the user to the request
     req.user = user;
-    console.log('Attached User to Request:', req.user);
 
     next();
   } catch (error) {
@@ -69,11 +59,11 @@ exports.isAdmin = (req, res, next) => {
 // Middleware to check if the user is a subadmin and has the required permission
 exports.isSubadmin = async (req, res, next) => {
   const user = await User.findById(req.user.id);
-  
+
   if (user.role !== 'subadmin') {
     return res.status(403).json({ success: false, message: 'Access denied' });
   }
-  
+
   // Check permissions
   if (!user.permissions[req.permission]) {
     return res.status(403).json({ success: false, message: 'Permission denied' });
