@@ -1,26 +1,46 @@
 #!/bin/bash
 
-# Define the deployment path
+# Define variables
 export DEPLOY_PATH=/home/user/public_html
+export SRC_PATH=$(pwd) # Source directory (current directory)
 
 # Ensure the deployment directory exists
+echo "Checking deployment directory..."
 if [ ! -d "$DEPLOY_PATH" ]; then
-    mkdir -p $DEPLOY_PATH
+    echo "Deployment directory does not exist. Creating $DEPLOY_PATH..."
+    mkdir -p "$DEPLOY_PATH"
 fi
 
-# Copy the files to the deployment path
-echo "Copying files to $DEPLOY_PATH"
-cp -r * $DEPLOY_PATH
+# Copy necessary files to the deployment path
+echo "Copying files to $DEPLOY_PATH (excluding node_modules and build artifacts)..."
+rsync -av --progress --exclude="node_modules" --exclude="dist" --exclude=".git" "$SRC_PATH/" "$DEPLOY_PATH" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Error: File copy failed."
+    exit 1
+fi
 
 # Install dependencies in the deployment directory
-echo "Installing dependencies"
-npm install --prefix $DEPLOY_PATH
+echo "Installing dependencies in $DEPLOY_PATH..."
+npm install --prefix "$DEPLOY_PATH" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Error: Dependency installation failed."
+    exit 1
+fi
 
 # Build the project
-echo "Building the project"
-npm run build --prefix $DEPLOY_PATH
+echo "Building the project in $DEPLOY_PATH..."
+npm run build --prefix "$DEPLOY_PATH" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    echo "Error: Build failed."
+    exit 1
+fi
 
-# Optionally, restart the application if it's a server
-# pm2 restart app_name
+# Optionally, restart the application (uncomment and update if needed)
+# echo "Restarting the application..."
+# pm2 restart app_name > /dev/null 2>&1
+# if [ $? -ne 0 ]; then
+#     echo "Error: Application restart failed."
+#     exit 1
+# fi
 
 echo "Deployment complete!"
