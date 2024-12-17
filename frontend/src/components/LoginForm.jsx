@@ -5,7 +5,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 
 function LoginForm() {
-  const { loggedIn } = useContext(AuthContext);
+  const { user, loggedIn, roleBasedRedirect } = useContext(AuthContext);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -13,11 +13,11 @@ function LoginForm() {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (localStorage.getItem("accessToken")) {
-      navigate("/dashboard"); // Or default dashboard route
+  useEffect(()=>{
+    if(user){
+      roleBasedRedirect(user)
     }
-  }, []);
+  },[user])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +34,7 @@ function LoginForm() {
     try {
       const { success, user, message, accessToken } = await login(formData);
       if (success) {
-        loggedIn(user);
+        await loggedIn(user);
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", user.refreshToken);
 

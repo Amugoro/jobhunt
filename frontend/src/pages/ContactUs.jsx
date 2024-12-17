@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -40,7 +41,7 @@ const ContactUs = () => {
     }
 
     try {
-      const response = await axios.post('https://jobhunt-b23g.onrender.com/api/contact', formData);
+      const response = await axios.post(`${API_URL}/api/contact`, formData);
       if (response.data.success) {
         setSuccess('Your message has been sent successfully!');
         setFormData({ name: '', email: '', subject: '', message: '' });

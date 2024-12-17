@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../../config";
 
 const FeedbackForm = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -55,7 +56,7 @@ const FeedbackForm = () => {
     setLoading(true);  // Show loading indicator
 
     try {
-      const response = await fetch("http://localhost:5000/send-feedback", {
+      const response = await fetch(`${API_URL}/send-feedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

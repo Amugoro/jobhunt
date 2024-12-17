@@ -163,7 +163,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh-token", async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.body.refreshToken;
 
   if (!refreshToken) {
     return res.status(403).json({ success: false, message: "Refresh token missing" });

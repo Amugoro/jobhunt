@@ -1,10 +1,12 @@
-import  { useState } from "react";
+import  { useState, useContext, useEffect } from "react";
 import { signup } from "../utils/api"; 
 import { useNavigate, Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from 'axios';
+import { AuthContext } from "../context/AuthContext";
 
 function SignupForm() {
+  const { user, loggedIn, roleBasedRedirect } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -16,6 +18,12 @@ function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(user){
+      roleBasedRedirect(user)
+    }
+  },[user])
   
 
   const handleChange = (e) => {
@@ -24,41 +32,41 @@ function SignupForm() {
   };
   const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
   const handleSubmit = async (e) => {
-    e.preventDefault();
+      e.preventDefault();
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
-  
-    if (!passwordRegex.test(formData.password)) {
-      setErrorMessage(
-        "Password must be at least 6 characters long, contain at least one uppercase letter, and one special character."
-      );
-      return;
-    }
+      const passwordRegex =
+          /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
 
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match");
-      return;
-    }
-
-    const { success, user, message, token } = await signup(formData);
-    if (success) {
-      alert(`Welcome ${user.fullName}`);
-
-      localStorage.setItem("authToken", token);
-      // eslint-disable-next-line no-undef
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // Redirect based on the user's role
-      console.log(`Redirecting to dashboard for role: ${user.role}`);
-      if (user.role === "client") {
-        navigate("/client-dashboard");
-      } else if (user.role === "freelancer") {
-        navigate("/freelancer-dashboard");
-      } else if (user.role === "tradeperson") {
-        navigate("/tradeperson-dashboard");
+      if (!passwordRegex.test(formData.password)) {
+          setErrorMessage(
+              'Password must be at least 6 characters long, contain at least one uppercase letter, and one special character.'
+          );
+          return;
       }
-    } else {
-      setErrorMessage(message);
-    }
+
+      if (formData.password !== formData.confirmPassword) {
+          setErrorMessage('Passwords do not match');
+          return;
+      }
+
+      const { success, user, message, token } = await signup(formData);
+      if (success) {
+          await loggedIn(user);
+          alert(`Welcome ${user.fullName}`);
+
+          localStorage.setItem("accessToken", token);
+          localStorage.setItem("refreshToken", user.refreshToken);
+
+          if (user.role === 'client') {
+              navigate('/client-dashboard');
+          } else if (user.role === 'freelancer') {
+              navigate('/freelancer-dashboard');
+          } else if (user.role === 'tradeperson') {
+              navigate('/tradeperson-dashboard');
+          }
+      } else {
+          setErrorMessage(message);
+      }
   };
 
   return (

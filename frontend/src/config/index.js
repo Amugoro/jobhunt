@@ -1,0 +1,1 @@
+export const API_URL = 'https://jobhunt-b23g.onrender.com'; //'http://localhost:4000'

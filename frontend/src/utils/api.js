@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API from './axio';
 
 
 const API_URL = 'https://jobhunt-b23g.onrender.com/api';
@@ -40,7 +41,7 @@ export const refreshAccessToken = async () => {
   }
 
   try {
-    const response = await axios.post('/api/auth/refresh-token', {
+    const response = await API.post('/auth/refresh-token', {
       refreshToken: refreshToken
     });
 
@@ -126,7 +127,7 @@ export const clientPostJob = async (formData) => {
 export const getClientProfile = async () => {
   try {
     const token = localStorage.getItem('accessToken');
-    const response = await axios.get(`${API_URL}/client/profiles`, {
+    const response = await API.get(`/client/profiles`, {
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
         Authorization: `Bearer ${token}`,
