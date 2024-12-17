@@ -3,7 +3,7 @@ import axios from "axios";
 import { io } from "socket.io-client";
 
 // Initialize socket
-const socket = io("https://jobhunt-server-iota.vercel.app"); 
+const socket = io("https://jobhunt-b23g.onrender.com"); 
 
 const Chat = ({ currentUserId, receiverId }) => {
   const [messages, setMessages] = useState([]);
