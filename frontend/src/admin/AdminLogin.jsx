@@ -14,7 +14,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('/api/admin/login', formData);
+      const { data } = await axios.post('https://jobhunt-server-iota.vercel.app/api/admin/login', formData);
 
       // Save token to localStorage
       localStorage.setItem('adminToken', data.token);

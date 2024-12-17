@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://jobhunt-server-iota.vercel.app/api';
 
 
 export const signup = async (formData) => {
