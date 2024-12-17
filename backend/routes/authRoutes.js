@@ -20,7 +20,7 @@ console.log("REFRESH_TOKEN_SECRET:", process.env.REFRESH_TOKEN_SECRET);
 
 
 // Signup Route
-router.post("/", async (req, res) => {
+router.post("/signup", async (req, res) => {
   const { fullName, email, password, role } = req.body;
 
   try {
@@ -53,28 +53,6 @@ router.post("/", async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
-router.post("/signup", async (req, res)  => {
-  try {
-    const { fullName, email, password, role } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({ fullName, email, password: hashedPassword, role });
-
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
-    res.status(201).json({
-      success: true,
-      user: { fullName: user.fullName, role: user.role },
-      message: "Signup successful",
-      token,
-    });
-  } catch (error) {
-    console.error("Error during signup:", error);
-    res.status(500).json({ success: false, message: "Server error" });
-  }
-});
-
 
 // Login Route
 // router.post("/login", async (req, res) => {
@@ -126,10 +104,11 @@ router.post("/signup", async (req, res)  => {
 
 // Login Route
 // Generate Access Token
-const generateToken = (userId) => {
+const generateAccessToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
 };
 
+// Generate Refresh Token
 const generateRefreshToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
 };
@@ -138,53 +117,50 @@ const generateRefreshToken = (userId) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("Login Request Body:", req.body);
-
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      console.log("User not found with email:", email);
-      return res.status(400).json({ success: false, message: "User not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
     }
 
     console.log("Plain Password:", password);
     console.log("Stored Hash from DB:", user.password);
 
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log("Password Match:", isMatch);
+    console.log("Password Comparison Result:", isMatch);
     if (!isMatch) {
-      return res.status(400).json({ success: false, message: "Invalid email or password" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid email or password" });
     }
 
     // Generate Tokens
-    const Token = generateToken(user._id);
-    console.log("Generated Token:", Token);
-
+    const accessToken = generateAccessToken(user._id);
+    //console.log("accesstoken:", accessToken);
     const refreshToken = generateRefreshToken(user._id);
-    console.log("Generated Refresh Token:", refreshToken);
+   // console.log("generateaccesstoken:", refreshToken);
 
-    // Save refresh token to database
+    // Save refresh token to database (optional for security)
     user.refreshToken = refreshToken;
     await user.save();
-    console.log("Saved Refresh Token:", user.refreshToken);
 
-    // Send refresh token as HTTP-only cookie
+    // Send refresh token as an HTTP-only cookie
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", // Secure in production
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-    console.log("Refresh Token Cookie Set Successfully");
 
     // Respond with access token and user info
-    res.json({ success: true, user, Token });
+    res.json({ success: true, user, accessToken });
   } catch (error) {
-    console.error("Error during login:", error.message || error);
+    console.error("Error during login:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 });
-
 
 router.post("/refresh-token", async (req, res) => {
   const refreshToken = req.cookies.refreshToken;

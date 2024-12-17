@@ -19,7 +19,7 @@ export const login = async (formData) => {
     const response = await axios.post(`${API_URL}/auth/login`, formData);
     if (response.data.success) {
       // Store both tokens
-      localStorage.setItem("Token", response.data.token);
+      localStorage.setItem("accessToken", response.data.token);
       localStorage.setItem("refreshToken", response.data.refreshToken);
       console.log("Token received by verify function:", response.data.refreshToken);
     }
@@ -32,7 +32,7 @@ export const login = async (formData) => {
 
 
 // API to refresh token
-export const refreshToken = async () => {
+export const refreshAccessToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
   
   if (!refreshToken) {
@@ -45,15 +45,15 @@ export const refreshToken = async () => {
     });
 
     if (response.data.success) {
-      const newToken = response.data.Token;
-      localStorage.setItem('Token', newToken);
-      return newToken;
+      const newAccessToken = response.data.accessToken;
+      localStorage.setItem('accessToken', newAccessToken);
+      return newAccessToken;
     } else {
       console.error('Failed to refresh token: ', response.data);
       return null;
     }
   } catch (error) {
-    console.error('Error refreshing token:', error);
+    console.error('Error refreshing access token:', error);
     if (error.response) {
       // If it's a server error, log it
       console.error('Server error:', error.response.data);
@@ -141,7 +141,7 @@ export const getClientProfile = async () => {
 // added api for client to send invation as a client
 export const clientSendInvitation = async (formData) => {
   try {
-    const token = localStorage.getItem('Token');
+    const token = localStorage.getItem('accessToken');
     const response = await axios.post(`${API_URL}/client/send-invitation`, formData, {
       headers: {
         // 'content-type': 'multipart/form-data',
@@ -254,7 +254,7 @@ export const fetchAllJobs = async (params) => {
 }
 // to fetch applied job
 export const fetchApplications = async () => {
-  const token = localStorage.getItem('Token');
+  const token = localStorage.getItem('accessToken');
   if (!token) {
     console.error('No token found, user is not authenticated');
     return { success: false, jobs: [], message: 'No token found' };

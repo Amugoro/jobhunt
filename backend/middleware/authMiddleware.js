@@ -30,11 +30,10 @@ exports.protect = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error during token verification:', error.message);
+    console.error('Error during token verification:', error);
     res.status(401).json({ message: 'Not authorized, token failed' });
   }
 };
-
 
 // Middleware to verify if the user is an admin
 exports.isAdmin = (req, res, next) => {

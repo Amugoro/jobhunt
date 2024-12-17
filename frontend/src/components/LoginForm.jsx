@@ -14,7 +14,7 @@ function LoginForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("Token")) {
+    if (localStorage.getItem("accessToken")) {
       navigate("/dashboard"); // Or default dashboard route
     }
   }, []);
