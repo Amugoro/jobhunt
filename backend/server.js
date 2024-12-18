@@ -219,6 +219,14 @@ app.post('/send-feedback', async (req, res) => {
   }
 });
 
+// Serve frontend static files
+app.use(express.static(path.join(__dirname, "frontend", "build")));
+
+// Catch-all for undefined routes (serves the frontend)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend", "build", "index.html"));
+});
+
 
 // Start the server
 const PORT = process.env.PORT || 5000;
