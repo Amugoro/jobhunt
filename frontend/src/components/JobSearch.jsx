@@ -17,14 +17,8 @@ const JobSearch = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    } else {
       fetchUserDetails();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate]);
+  }, []);
 
   const fetchUserDetails = async () => {
     const { success, user, message } = await getUserData();

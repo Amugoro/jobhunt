@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -14,7 +15,7 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('https://jobhunt-b23g.onrender.com/api/admin/login', formData);
+      const { data } = await axios.post(`${API_URL}/api/admin/login`, formData);
 
       // Save token to localStorage
       localStorage.setItem('adminToken', data.token);

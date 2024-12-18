@@ -27,80 +27,79 @@ import AdminDashboard from "./admin/AdminDashboard";
 import AdminLogin from "./admin/AdminLogin";
 import SubadminDashboard from "./admin/SubadminDashboard";
 import JobApplication from "./components/JobApplication";
-
-// Protected Route component
-function ProtectedRoute({ element: Component, ...rest }) {
-  const { user } = useContext(AuthContext);
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  const roleDashboardRoutes = {
-    client: "/client-dashboard",
-    freelancer: "/freelancer-dashboard",
-    tradeperson: "/tradeperson-dashboard",
-  };
-
-  const currentPath = rest.path;
-
-  if (currentPath === roleDashboardRoutes[user.role]) {
-    return <Component />;
-  }
-
-  return <Navigate to={roleDashboardRoutes[user.role]} replace />;
-}
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
-    <AuthContextProvider>
-      <Router>
+    <Router>
+      <AuthContextProvider>
         <Navbar />
         <div className="page-content">
-        <Routes>
-        
-         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-         <Route path="/Subadmin-Dashboard" element={<SubadminDashboard/>} />
-         <Route path="/admin-login" element={<AdminLogin />} />
+          <Routes>
 
-          
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/Subadmin-Dashboard" element={<SubadminDashboard />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+
+
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             {/* Protected Routes */}
-            <Route path="/client-dashboard" element={<ClientDashboard />} />
-            <Route
-              path="/freelancer-dashboard"
-              element={<FreelancerDashboard />}
-            />
-            <Route
-              path="/tradeperson-dashboard"
-              element={<TradepersonDashboard />}
-            />
+            <Route path="/client-dashboard"
+              element={
+                <ProtectedRoute>
+                  <ClientDashboard />
+                </ProtectedRoute>
+              } />
+
+            <Route path="/freelancer-dashboard"
+              element={
+                <ProtectedRoute>
+                  <FreelancerDashboard />
+                </ProtectedRoute>
+              } />
+
+
+            <Route path="/tradeperson-dashboard"
+              element={
+                <ProtectedRoute>
+                  <FreelancerDashboard />
+                </ProtectedRoute>
+              } />
+
+            <Route path="/job-search"
+              element={
+                <ProtectedRoute>
+                  <JobSearch />
+                </ProtectedRoute>
+              } />
+
+            {/* Protected Routes */}
+
             <Route path="/apply/:jobId" element={<JobApplication />} />
             <Route path="/services" element={<Services />} />
             <Route path="/aboutus" element={<AboutUs />} />
-            <Route path="/job-search" element={<JobSearch />} />
             <Route path="/our-team" element={<OurTeam />} />
             <Route path="/faqs" element={<FAQs />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/contact-us" element={<ContactUs />} />
             <Route path="/donation-page" element={<DonationPage />} />
 
-            
+
 
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignupForm />} />
 
             {/* Protected Routes */}
 
-           
-          
-        </Routes>
+
+
+          </Routes>
         </div>
 
         <Footer />
-      </Router>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </Router>
   );
 }
 
